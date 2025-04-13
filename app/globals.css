@@ -1,0 +1,116 @@
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary-color: radial-gradient(3000px circle at 50% 0%, rgb(4, 121, 112) 5.2%, rgb(2, 68, 61) 50%, rgb(5, 51, 50) 70%);
+  --secondary-color: #1e2b35;
+  --border-color: salmon;
+  --message-color: salmon;
+  --button-color: rgb(4, 121, 112);
+  --button-color-active: rgb(4, 121, 112);
+  --button-background-hover: #ffffff50;
+  --button-border-hover: #fa807285;
+  --input-color: #ffffff;
+  --label-color: #000000;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+html {
+  /* height: 100%; */
+  background: no-repeat;
+  background: var(--primary-color);
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  padding: 5px 0px;
+  min-width: 90px;
+  font-size: 13px;    
+  width:  auto;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  margin: 5px 0px;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 5px 0px;
+  background-color: var(--button-color);
+}
+
+button:hover {
+  cursor: pointer;
+  border: 1px solid var(--button-border-hover);
+}
+
+button:active {
+  background-color: var(--button-backgound-hover);
+  color: var(--button-color-active);
+}
+
+.message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: salmon;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+} */

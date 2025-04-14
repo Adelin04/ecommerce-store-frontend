@@ -15,7 +15,7 @@ import NotificationsSettings from '@/app/component/userSettings/notificationsSet
 
 export default function Settings() {
   const { hasMounted } = useMounted()
-  const { user, isAuth,setLogout } = useUserStore();
+  const { user, isAuth, setLogout } = useUserStore();
   const [btnClicked, setBtnClicked] = useState<any>('Profile');
   const [menus, setMenus] = useState(
     {
@@ -81,7 +81,7 @@ export default function Settings() {
         </WrapperSlider>
       </Slider>
 
-      <Content>
+      <Content className='content'>
         {btnClicked && createElementCustom()}
       </Content>
     </Container >
@@ -95,7 +95,19 @@ const Container = styled.div`
     align-items: center;
     width: 100%;
     height: 100vh;
-`
+
+    @media (max-width: 860px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 860px) {
+          /* width: auto; */
+         .containerPopUp{
+          width: auto;  
+           margin: auto;
+         }
+        }
+  `
 
 const Slider = styled.div`
     display: flex;
@@ -103,6 +115,12 @@ const Slider = styled.div`
     align-items: center;
     min-width: 250px;
     height: 100%;
+    
+    @media (max-width: 860px) {
+      justify-content: center;
+      width: 100%;
+      background-color: var(--secondary-color);
+    }
 `
 
 const WrapperSlider = styled.div`
@@ -115,6 +133,13 @@ const WrapperSlider = styled.div`
     height: 100%;
     border-right: 1px solid salmon;
     /* background-color: red; */
+    
+    @media (max-width: 860px) {
+      width: 100%;
+      max-width: 100%;
+      border-right:none;
+      border-bottom: 1px solid salmon;
+    }
 `
 
 const WrapperButtons = styled.div`
@@ -147,8 +172,14 @@ const WrapperButtons = styled.div`
       padding: 5px 0px;
       background-color: var(--button-color);
     }
+    
+    
+    @media (max-width: 860px) {
+      width: 100%;
+    }
 
 `
+
 
 // const AdminPanel = styled.div`
 //     display: flex;
@@ -193,3 +224,4 @@ const Content = styled.div`
     /* background-color: salmon; */
     /* border: 5px solid black; */
 `
+    

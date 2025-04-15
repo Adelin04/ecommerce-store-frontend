@@ -73,7 +73,7 @@ export default function Settings() {
             </UserPanel>
 
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-              {user?.role === 'admin' && <Link className='link-dashboard' href={'/dashboard'} style={{ color: 'salmon' }} >Dashboard</Link>}
+              {user?.role === 'admin' && <Link className='link-dashboard' href={'/dashboard'} style={{ color: '#ffffff' }} >Dashboard</Link>}
               <Button id='Notifications' style={{ color: 'salmon' }} onClick={handleLogout}>Logout</Button>
             </div>
 
@@ -81,9 +81,9 @@ export default function Settings() {
         </WrapperSlider>
       </Slider>
 
-      <Content className='content'>
+      <DynamicElement className='dynamicElement'>
         {btnClicked && createElementCustom()}
-      </Content>
+      </DynamicElement>
     </Container >
   );
 }
@@ -119,7 +119,8 @@ const Slider = styled.div`
     @media (max-width: 860px) {
       justify-content: center;
       width: 100%;
-      background-color: var(--secondary-color);
+      height: auto;
+      /* background-color: var(--secondary-color); */
     }
 `
 
@@ -214,7 +215,7 @@ const UserPanel = styled.div`
 `
 
 
-const Content = styled.div`
+const DynamicElement = styled.div`
     position: relative;
     display: flex;
     justify-content: center;
@@ -224,4 +225,4 @@ const Content = styled.div`
     /* background-color: salmon; */
     /* border: 5px solid black; */
 `
-    
+

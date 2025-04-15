@@ -45,7 +45,7 @@ export async function refreshToken() {
         })
         .then((res) => { return res.json() });
 
-    // console.log('user', user);
+    console.log('user', user);
     if (user.success) {
         cookies().set("accessToken", user.accessToken, {
             httpOnly: true, // prevent XSS attacks, cross site scripting attack
@@ -114,7 +114,7 @@ export async function register(body: any) {
 }
 
 export async function logout() {
-    
+
     const result = await fetch(`${URI}auth/logout`,
         {
             method: 'POST',
@@ -124,7 +124,10 @@ export async function logout() {
         })
         .then((res) => { return res.json() });
 
-    console.log('result', result);
+    if (result.success) {
+        cookies().has('accessToken') && cookies().delete('accessToken');
+        cookies().has('refreshToken') && cookies(). delete('refreshToken');
+    }
 
 }
 

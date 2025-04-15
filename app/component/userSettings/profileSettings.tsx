@@ -215,6 +215,11 @@ const PopUp = styled.div`
     border-top:  1px solid salmon;
     box-shadow: 0 35px 60px -15px rgb(0 0 0 / 0.5);
     background: white;
+
+    @media (max-width: 860px) {
+     width : auto;
+     max-width: 600px;
+  }
 `
 
 

@@ -26,7 +26,7 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
         setCategories(categories);
         setProducts(products);
 
-        if (userResult) checkAuth(userResult);
+        if (userResult.success) checkAuth(userResult.user);
 
     }
 

@@ -33,7 +33,7 @@ export const useUserStore = create((set: any, get: any) => ({
         try {
             // const fetchUser = await axios.post(`${process.env.DEV_URI}auth/login`, { email, password }, { withCredentials: true });
             // const user = fetchUser.data
-            
+
             set(() => ({ user: user, isAuth: true, isAdmin: user.role === 'admin', }));
 
         } catch (error) {
@@ -59,6 +59,7 @@ export const useUserStore = create((set: any, get: any) => ({
                        */
         // const response = await axios.post(`${process.env.DEV_URI}auth/logout`, { credentials: 'include' }, { withCredentials: true });
         await logout();
+
         set(() => ({ user: null, isAuth: false, isAdmin: false, }));
 
 

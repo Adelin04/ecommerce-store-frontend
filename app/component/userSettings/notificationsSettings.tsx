@@ -22,8 +22,8 @@ export default function NotificationsSettings({ close, user }: PropsNotification
     }, []);
 
     return (
-        <Container>
-            <PopUp>
+        <Container className="container">
+            <PopUp className="popUp">
                 <Link className='close' href={'/'}> go to store </Link>
                 <LeftContent className="leftContent">
                     <ContainerLeftSide className={'containerLeftSide '}>
@@ -31,12 +31,6 @@ export default function NotificationsSettings({ close, user }: PropsNotification
                             <label>Account</label>
                             <p>Manage your account info</p>
                         </WrapperTitleLeftSide>
-
-                        <ButtonsLeftSide>
-                            {/* <button className="button">Profile</button> */}
-                            {/* <button className="button">Security</button>
-                            <button className="button">Notifications</button> */}
-                        </ButtonsLeftSide>
 
                     </ContainerLeftSide>
 
@@ -119,6 +113,11 @@ const PopUp = styled.div`
     border-top:  1px solid salmon;
     box-shadow: 0 35px 60px -15px rgb(0 0 0 / 0.5);
     background: white;
+
+    @media (max-width: 860px) {
+     width : auto;
+     max-width: 600px;
+  }
 `
 
 const LeftContent = styled.div`
@@ -161,40 +160,6 @@ const WrapperTitleLeftSide = styled.div`
         font-size: 10px;
         font-weight: bold;
         /* color: #ffffff; */
-    }
-`
-
-const ButtonsLeftSide = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 15px 0px;
-    
-    .button{
-      padding: 5px 0px;
-      min-width: 90px;
-      font-size: 13px;    
-      width:  auto;
-      min-height: 25px; 
-      height: auto;
-      outline: none;
-      border: none;
-      border-radius: 5px;
-      margin: 5px 0px;
-      background-color: var(--button-color);
-
-    }
-
-    button:hover{
-      cursor: pointer;
-      border: 1px solid var(--button-border-hover);
-    }
-    
-    button:active{
-        color: var(--button-color-active);
-        background-color: var(--button-backgound-hover);
     }
 `
 

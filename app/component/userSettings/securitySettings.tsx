@@ -34,7 +34,7 @@ export default function SecuritySettings({ close, user }: PropsSecuritySettings)
                         </WrapperTitleLeftSide>
 
                         <ButtonsLeftSide>
-                            <Button style={{ color: btnClicked === 'Change Password' ? 'salmon' : '#ffffff', width: '80%' }} onClick={() => setBtnClicked('Change Password')}>Change Password</Button>
+                            <Button className="responsive" style={{ color: btnClicked === 'Change Password' ? 'salmon' : '#ffffff', width: 'auto', padding: '5px' }} onClick={() => setBtnClicked('Change Password')}>Change Password</Button>
                         </ButtonsLeftSide>
 
                     </ContainerLeftSide>
@@ -124,6 +124,11 @@ const PopUp = styled.div`
     border-top:  1px solid salmon;
     box-shadow: 0 35px 60px -15px rgb(0 0 0 / 0.5);
     background: white;
+
+    @media (max-width: 860px) {
+     width : auto;
+     max-width: 600px;
+  }
 `
 
 const LeftContent = styled.div`
@@ -201,6 +206,10 @@ const ButtonsLeftSide = styled.div`
         color: var(--button-color-active);
         background-color: var(--button-backgound-hover);
     }
+
+    @media (max-width: 470px) {
+        .responsive{ height: 50px; }
+  }
 `
 
 const ContainerCopyRight = styled.div`

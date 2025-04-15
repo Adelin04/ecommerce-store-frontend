@@ -17,7 +17,7 @@ export default function Dashboard() {
   const router = useRouter()
   const { hasMounted } = useMounted()
   const { products } = useProductStore()
-  const { user} = useUserStore();
+  const { user } = useUserStore();
   const [btnClicked, setBtnClicked] = useState<any>(null);
   const [menus, setMenus] = useState(
     {
@@ -111,7 +111,12 @@ const Container = styled.div`
         display: flex;
         min-width: 250px;
     }
-`
+    
+    @media (max-width: 860px) {
+     flex-direction: column;
+  }
+
+  `
 const Slider = styled.div`
     position: fixed;
     display: flex;
@@ -119,7 +124,17 @@ const Slider = styled.div`
     align-items: center;
     min-width: 250px;
     height: 100%;
-`
+    
+    @media (max-width: 860px) {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: auto;
+      margin: 10px 0px;
+    }
+    `
 
 const WrapperSlider = styled.div`
     display: flex;
@@ -131,6 +146,13 @@ const WrapperSlider = styled.div`
     height: 100%;
     border-right: 1px solid salmon;
     /* background-color: red; */
+    
+    @media (max-width: 860px) {
+      border: none;
+      width: 100%;
+      max-width: 100%;
+      border-bottom: 1px solid salmon;
+    }
 `
 
 const AdminPanel = styled.div`
@@ -152,6 +174,7 @@ const AdminPanel = styled.div`
       font-size: 17px;
       font-weight: bold;
       color: #ffffff;
+
     }
 
     button{
@@ -169,6 +192,11 @@ const Content = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+
+    @media (max-width: 860px) {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
     /* background-color: salmon; */
     /* border: 5px solid black; */
 `

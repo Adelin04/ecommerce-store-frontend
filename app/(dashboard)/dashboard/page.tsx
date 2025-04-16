@@ -79,18 +79,6 @@ export default function Dashboard() {
       <div className='spacer'></div>
 
       <Content>
-        {/*         <TableHead>
-          <p className='name'>Name</p>
-          <p className='color'>Color</p>
-          <p className='size'>Size</p>
-          <p className='price'>Price</p>
-          <p className='currency'>Currency</p>
-          <p className='brand'>Brand</p>
-          <p className='seller'>Seller</p>
-          <p className='gender'>Gender</p>
-          <p className='category'>Category</p>
-          
-          </TableHead> */}
         <ProductsListAdmin products={products} />
         <div style={btnClicked ? { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#b3b3b345', overflow: 'hidden' } : {}}>
           {btnClicked && createElementCustom()}

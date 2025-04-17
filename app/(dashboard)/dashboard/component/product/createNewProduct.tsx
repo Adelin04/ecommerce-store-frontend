@@ -30,7 +30,7 @@ interface PropsCreateNewProduct {
 
 export default function CreateNewProduct({ close, user }: PropsCreateNewProduct) {
     const router = useRouter()
-    const { createNewProduct, loading } = useProductStore()
+    const { createNewProduct, isLoadingProducts: loading } = useProductStore()
     const { getCurrencies, currencies } = useCurrencyStore()
     const { getBrands, brands } = useBrandStore()
     const { getColors, colors } = useColorStore()

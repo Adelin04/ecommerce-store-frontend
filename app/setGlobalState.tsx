@@ -2,7 +2,7 @@
 
 import './globals.css'
 import { useProductStore } from "./zustandStore/useProductStore";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import styled from 'styled-components';
 import { useCategoryStore } from './zustandStore/useCategoryStore';
 import Loading from './loading';
@@ -15,23 +15,27 @@ import { checkIsAuth } from './actions/userActions';
 const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
     const { hasMounted } = useMounted()
     const { checkAuth, checkingAuth } = useUserStore();
-    const { setProducts } = useProductStore();
-    const { setCategories } = useCategoryStore();
+    const { setProducts, products } = useProductStore();
+    const { setCategories, categories } = useCategoryStore();
 
     async function fetchData() {
-        const categories: Array<ICategory> = await fetchCategories().then((data) => { return data });
-        const products: Array<IProduct> = await fetchProducts().then((data) => { return data });
-        const userResult: any = await checkIsAuth().then((data) => { return data });
+        // const categories: Array<ICategory> = await fetchCategories().then((data) => { return data });
+        // const products: Array<IProduct> = await fetchProducts().then((data) => { return data });
+        // const userResult: any = await checkIsAuth().then((data) => { return data });
 
-        setCategories(categories);
-        setProducts(products);
-        
-        if (userResult) checkAuth(userResult.user);
+
+        // categories ? setCategories(categories) : setCategories([]);
+        // products ? setProducts(products) : setProducts([]);
+
+        // userResult ? checkAuth(userResult.user) : checkAuth(null);
+        // console.log({ categories, products, userResult });
 
     }
 
     useEffect(() => {
-        fetchData();
+        checkAuth();
+        setCategories();
+        setProducts();
 
     }, [checkingAuth]);
 
@@ -39,7 +43,9 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
         return <Loading />
     return (
         <Container>
-            {children}
+            <Suspense fallback={<Loading />}>
+                {children}
+            </Suspense>
         </Container>
     )
 }

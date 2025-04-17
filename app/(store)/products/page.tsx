@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { redirect } from 'next/navigation'
 
 const ProductsPage = () => {
-    const { selectedProducts, selectedByCategory, products }: any = useProductStore();
+    const { selectedProducts, selectedByCategory, products,isLoadingProducts }: any = useProductStore();
     const { hasMounted } = useMounted()
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const ProductsPage = () => {
     }, [products])
 
 
-    if (!hasMounted)
+    if (!hasMounted || isLoadingProducts)
         return <Loading />
 
     return (

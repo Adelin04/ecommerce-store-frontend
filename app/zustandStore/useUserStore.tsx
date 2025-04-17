@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { IAddress, IUser } from "../interfaces/interfaces";
 import axios from "axios";
-import { logout, refreshToken } from "../actions/userActions";
+import { checkIsAuth, logout, refreshToken } from "../actions/userActions";
 
 interface UserState {
     user: IUser | null,
@@ -10,7 +10,7 @@ interface UserState {
     isAdmin: boolean,
     addresses: Array<any> | null,
     selectedAddress: IAddress,
-    isLoading: boolean
+    isLoadingUser: boolean
 }
 
 // Initialize a default state
@@ -21,14 +21,14 @@ const INITIAL_STATE: UserState = {
     isAdmin: false,
     addresses: null,
     selectedAddress: {} as IAddress,
-    isLoading: false
+    isLoadingUser: false
 }
 
 export const useUserStore = create((set: any, get: any) => ({
     ...INITIAL_STATE,
 
     setLogin: async (user: IUser) => {
-        set(() => ({ isLoading: true }));
+        set(() => ({ isLoadingUser: true }));
 
         try {
             // const fetchUser = await axios.post(`${process.env.DEV_URI}auth/login`, { email, password }, { withCredentials: true });
@@ -39,11 +39,11 @@ export const useUserStore = create((set: any, get: any) => ({
         } catch (error) {
         }
 
-        set(() => ({ isLoading: false, isAuth: true }));
+        set(() => ({ isLoadingUser: false, isAuth: true }));
     },
 
     setLogout: async () => {
-        set(() => ({ isLoading: true }));
+        set(() => ({ isLoadingUser: true }));
 
         /*         fetch(`${process.env.DEV_URI}auth/logout`, {
                     credentials: 'include',
@@ -63,20 +63,22 @@ export const useUserStore = create((set: any, get: any) => ({
         set(() => ({ user: null, isAuth: false, isAdmin: false, }));
 
 
-        set(() => ({ isLoading: false }));
+        set(() => ({ isLoadingUser: false }));
     },
 
-    checkAuth: async (user: IUser | null) => {
+    checkAuth: async (/* user: IUser | null */) => {
         try {
-            set(() => ({ isLoading: true }));
-            // const fetchUser = await axios.get(`${process.env.DEV_URI}auth/profile`, { withCredentials: true });
-            // const user = fetchUser.data
+            set(() => ({ checkIsAuth: true, isLoadingUser: true }));
 
-            set(() => ({ user: user, isAuth: true, isAdmin: user?.role === 'admin', }));
+            const userResult: any = await checkIsAuth().then((data) => { return data });
+
+            if (userResult) set(() => ({ user: userResult.user, isAuth: true, isAdmin: userResult.user?.role === 'admin' }));
+            else set(() => ({ user: null, isAuth: false }));
+
         } catch (error) {
             set(() => ({ user: null, isAuth: false }));
         }
-        set(() => ({ checkingAuth: false, isLoading: false }));
+        set(() => ({ checkingAuth: false, isLoadingUser: false }));
     },
 
     setRefreshToken: async () => {
@@ -89,7 +91,6 @@ export const useUserStore = create((set: any, get: any) => ({
             set({ checkingAuth: false });
             // return response.data;
             const response = refreshToken();
-            console.log(response);
 
             return response;
         } catch (error) {

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { IProduct } from "../interfaces/interfaces";
 import axios from "axios";
 import { URI } from "../utils/URI";
+import { fetchProducts } from "../actions/productActions";
 
 interface ProductState {
     products: Array<IProduct>,
@@ -14,7 +15,7 @@ interface ProductState {
     newProductsAdded: [],
     selectedProduct: IProduct | null,
     selectedProducts: Array<IProduct> | null,
-    loading: boolean
+    isLoadingProducts: boolean
 }
 
 // Initialize a default state
@@ -29,25 +30,28 @@ const INITIAL_STATE: ProductState = {
     newProductsAdded: [],
     selectedProduct: null,
     selectedProducts: null,
-    loading: false
+    isLoadingProducts: false
 }
 
 export const useProductStore = create((set: any, get: any) => ({
     ...INITIAL_STATE,
 
     createNewProduct: async (product: any) => {
-        set(() => ({ loading: true }));
+        set(() => ({ isLoadingProducts: true }));
         const response = await axios.post(`${process.env.DEV_URI}products/createProduct`, product, { withCredentials: true });
 
         set(() => ({ newProductsAdded: [...get().newProductsAdded, response.data] }))
-        set(() => ({ loading: false }));
+        set(() => ({ isLoadingProducts: false }));
         return response.data
     },
 
-    setProducts: async (products: Array<IProduct>) => {
+    setProducts: async () => {
+        set(() => ({ isLoadingProducts: true }));
+        const fetchedProducts: Array<IProduct> = await fetchProducts().then((data) => { return data });
 
-        // const fetchProducts = await axios.get(`${process.env.DEV_URI}products/getAllProducts`);
-        set(() => ({ products: products }))
+        set(() => ({ products: fetchedProducts }));
+
+        set(() => ({ isLoadingProducts: false }));
     },
 
     setProductById: async (product: IProduct) => {
@@ -70,9 +74,9 @@ export const useProductStore = create((set: any, get: any) => ({
     },
 
     updateProduct: async (product: any) => {
-        set(() => ({ loading: true }));
+        set(() => ({ isLoadingProducts: true }));
         const response = await axios.put(`${process.env.DEV_URI}products/updateProduct/${product._id}`, product, { withCredentials: true });
-        set(() => ({ loading: false }));
+        set(() => ({ isLoadingProducts: false }));
         return response.data
     },
 

@@ -32,7 +32,7 @@ interface PropsEditProduct {
 export default function EditProduct({ close, user, product }: PropsEditProduct) {
     const { name, color, description, price, brand, code, size, stock, currency, gender, category, images, _id } = product
     const router = useRouter()
-    const { updateProduct, loading } = useProductStore();
+    const { updateProduct, isLoadingProducts: loading } = useProductStore();
     const [message, setMessage] = useState('');
     const { getCurrencies, currencies } = useCurrencyStore()
     const { getBrands, brands } = useBrandStore()

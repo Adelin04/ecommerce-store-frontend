@@ -19,8 +19,11 @@ export async function checkIsAuth() {
         })
         .then((res) => { return res.json() })
         .then((data) => {
+
             if (data.success)
                 return data
+            else
+                return null
         })
         .catch((error) => {
             console.log(error);
@@ -45,7 +48,6 @@ export async function refreshToken() {
         })
         .then((res) => { return res.json() });
 
-    console.log('user', user);
     if (user.success) {
         cookies().set("accessToken", user.accessToken, {
             httpOnly: true, // prevent XSS attacks, cross site scripting attack
@@ -126,7 +128,7 @@ export async function logout() {
 
     if (result.success) {
         cookies().has('accessToken') && cookies().delete('accessToken');
-        cookies().has('refreshToken') && cookies(). delete('refreshToken');
+        cookies().has('refreshToken') && cookies().delete('refreshToken');
     }
 
 }

@@ -27,7 +27,7 @@ interface PropsCreateNewProduct {
 
 
 export default function CreateNewColor({ close, user }: PropsCreateNewProduct) {
-    const { createNewProduct, loading } = useProductStore()
+    const { createNewProduct, isLoadingProducts: loading } = useProductStore()
     const { getColors, colors } = useColorStore()
     const [message, setMessage] = useState('');
 

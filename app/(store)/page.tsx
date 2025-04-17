@@ -9,63 +9,64 @@ import { useProductStore } from '../zustandStore/useProductStore';
 import zzz from '../../assets/zzz.svg';
 import Image from 'next/image';
 import Button from '../component/ui/Button';
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 const HomePage = () => {
-  const { categorySelected }: any = useCategoryStore();
+  const { hasMounted } = useMounted()
+  const { categorySelected, isLoadingCategories, categories }: any = useCategoryStore();
   const { selectedProducts }: any = useProductStore();
   const [message, setMessage]: any = useState(`
     No products available at the moment.
     Please leave your email and we will notify you when our site is ready.
     A lot of love, Team Boutique.
     `);
-  const { hasMounted } = useMounted()
 
-
-  console.log('categorySelected', categorySelected);
-  if (!hasMounted)
+  if (!hasMounted || isLoadingCategories)
     return <Loading />
+
+  if (categories === null) {
+    return (
+      <ContainerZzz>
+
+        <div className='wrapper-zzz'>
+          <div className='message'> {message} </div>
+
+          <div className='zzz_1'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_2'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_3'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_4'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_5'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_6'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+          <div className='zzz_7'>
+            <Image src={zzz} width={100} height={100} alt='zzz' />
+          </div>
+        </div>
+
+        <div className='notify-me'>
+          <input type="email" id="notify-me" placeholder='email' />
+          <Button className='notify-me-button'> Notify me </Button>
+        </div>
+
+      </ContainerZzz>
+    )
+  }
 
   return (
     <Container className='home-container'>
 
-      {categorySelected && <CategoriesList categories={categorySelected} />}
-      {(!categorySelected || categorySelected.length === 0 || categorySelected === undefined) &&
-        <ContainerZzz>
-
-          <div className='wrapper-zzz'>
-            <div className='message'> {message} </div>
-
-            <div className='zzz_1'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_2'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_3'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_4'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_5'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_6'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-            <div className='zzz_7'>
-              <Image src={zzz} width={100} height={100} alt='zzz' />
-            </div>
-          </div>
-
-          <div className='notify-me'>
-            <input type="email" id="notify-me" placeholder='email' />
-            <Button className='notify-me-button'> Notify me </Button>
-          </div>
-
-        </ContainerZzz>
-      }
+      {(categorySelected !== null) && <CategoriesList categories={categorySelected} />}
 
     </Container>
   )

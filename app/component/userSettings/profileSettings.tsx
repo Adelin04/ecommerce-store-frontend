@@ -21,7 +21,7 @@ interface PropsProfileSettings {
 export default function ProfileSettings({ close, user }: PropsProfileSettings) {
     const [btnClicked, setBtnClicked] = useState<any>('Profile');
     const [toggleInputNewEmail, setToggleInputNewEmail] = useState<boolean>(false);
-    const [imageProfile, setImageProfile] = useState<string | File | null|any>(null);
+    const [imageProfile, setImageProfile] = useState<string | File | null | any>(null);
     const [emails, setEmails] = useState<Array<string>>([]);
     const [message, setMessage] = useState<string>('');
     const formData = new FormData();
@@ -124,8 +124,8 @@ export default function ProfileSettings({ close, user }: PropsProfileSettings) {
                         </WrapperTitleLeftSide>
 
                         <ButtonsLeftSide>
-                            <Button style={{ color: btnClicked === 'Profile' ? 'salmon' : '#ffffff', width: '80%' }} onClick={() => { setMessage(''); setBtnClicked('Profile') }}>Profile</Button>
-                            <Button style={{ color: btnClicked === 'Email' ? 'salmon' : '#ffffff', width: '80%' }} onClick={() => { setMessage(''); setBtnClicked('Email') }}>Email</Button>
+                            <Button className='profile-btn' style={{ color: btnClicked === 'Profile' ? 'salmon' : '#ffffff' }} onClick={() => { setMessage(''); setBtnClicked('Profile') }}>Profile</Button>
+                            <Button className='email-btn' style={{ color: btnClicked === 'Email' ? 'salmon' : '#ffffff' }} onClick={() => { setMessage(''); setBtnClicked('Email') }}>Email</Button>
                         </ButtonsLeftSide>
 
                     </ContainerLeftSide>
@@ -243,6 +243,12 @@ const ContainerLeftSide = styled.div`
     width: 100%;
     height: 50%;
     /* background-color: red; */
+    
+    @media (max-width: 880px) {
+        width: auto;
+        height: auto;
+  }
+
 `
 
 const WrapperTitleLeftSide = styled.div`
@@ -273,6 +279,22 @@ const ButtonsLeftSide = styled.div`
     align-items: center;
     width: 100%;
     margin: 15px 0px;
+
+    .profile-btn{
+        width: 80%;
+    }
+
+      .email-btn{
+        width: 80%;
+    }
+
+    @media (max-width: 880px) {
+        .email-btn,
+        .profile-btn{
+            width: 60%;
+            font-size: 10px;
+        }
+  }
 `
 
 const ContainerCopyRight = styled.div`

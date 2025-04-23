@@ -96,17 +96,13 @@ const Container = styled.div`
     width: 100%;
     height: 100vh;
 
-    @media (max-width: 860px) {
+    @media (max-width: 880px) {
     flex-direction: column;
+    .containerPopUp{
+     width: auto;  
+      margin: auto;
   }
-
-  @media (max-width: 860px) {
-          /* width: auto; */
-         .containerPopUp{
-          width: auto;  
-           margin: auto;
-         }
-        }
+  }
   `
 
 const Slider = styled.div`
@@ -116,7 +112,7 @@ const Slider = styled.div`
     min-width: 250px;
     height: 100%;
     
-    @media (max-width: 860px) {
+    @media (max-width: 880px) {
       justify-content: center;
       width: 100%;
       height: auto;
@@ -220,7 +216,7 @@ const DynamicElement = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 90%;
     height: 100%;
     /* background-color: salmon; */
     /* border: 5px solid black; */

@@ -44,6 +44,11 @@ export interface IProduct {
     timestamps: Date;
 }
 
+export interface IBasket {
+    _id: number | string;
+    product: IProduct;
+}
+
 export interface ICategory {
     _id: number | string;
     category: string;

@@ -6,7 +6,7 @@ export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAtt
     const { children, ...attributes } = props;
 
     return (
-        <button {...attributes}>{children}</button>
+        <button {...attributes} disabled={attributes.disabled}>{children}</button>
     )
 }
 

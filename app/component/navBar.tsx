@@ -2,26 +2,30 @@
 
 import styled from 'styled-components';
 import Logo from './logo';
-// import UserProfile from './UserProfile.jsx';
+import basketLogo from '../../assets/basket.svg';
 import React, { useEffect, useState } from 'react';
 import { useCategoryStore } from '../zustandStore/useCategoryStore';
 import { useProductStore } from '../zustandStore/useProductStore';
-import Link from 'next/link';
 import UserProfile from './userProfile';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '../zustandStore/useUserStore';
+import BasketPopUp from '../(basket)/basket/component/basketPopUp';
+import { useBasketStore } from '../zustandStore/useBasketStore';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const NavBar = ({ navBarMenu }: any) => {
     const router = useRouter()
     const { user } = useUserStore()
     const { products, resetSelectedProducts } = useProductStore()
+    const { counterProduct } = useBasketStore()
     const { setCategoryClicked, categorySelected }: any = useCategoryStore()
 
     const [windowDimensions, setWindowDimensions] = useState<any>({
         width: window.innerWidth,
         height: window.innerHeight,
     });
-    const [clickedGender, setClickedGender] = useState(() => localStorage.getItem('gender')|| 'MEN')
+    const [clickedGender, setClickedGender] = useState(() => localStorage.getItem('gender') || 'MEN')
 
     const handleClickNavBarMenu = (menuName: string) => {
         localStorage.setItem('gender', menuName)
@@ -33,7 +37,7 @@ const NavBar = ({ navBarMenu }: any) => {
     }
 
     useEffect(() => {
-        setCategoryClicked(localStorage.getItem('gender')|| 'MEN')
+        setCategoryClicked(localStorage.getItem('gender') || 'MEN')
 
         const handleResize = () => {
             setWindowDimensions({
@@ -65,15 +69,25 @@ const NavBar = ({ navBarMenu }: any) => {
                         })}
                     </MenuNavBar>
 
-                    <WrapperUserProfile className='wrapper-user-profile'>
+                    <WrapperUserProfile className='wrapper-user-profile' style={{ background: 'while' }}>
                         <UserProfile user={user} />
                     </WrapperUserProfile>
+
+                    <WrapperBasket className='wrapper-basket'>
+                        <Link href={'/basket'}>
+                            <Image className='img-basket' src={basketLogo} alt="Basket" width={40} height={40} />
+                        </Link>
+                        <div className='wrapper-basket-popup' >
+                            <BasketPopUp counter={counterProduct} />
+                        </div>
+                    </WrapperBasket>
 
                 </WrapperNavBar>)
                 :
                 (<ResponsiveBrowser className='responsive-browser-nav-bar'>
 
                     <WrapperLogoUserProfile>
+
                         <WrapperLogoResponsive className='wrapper-logo'>
                             <Logo />
                         </WrapperLogoResponsive>
@@ -188,10 +202,39 @@ const WrapperUserProfile = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width:25%;
+    /* width:25%; */
     height: 100%;
     padding: 10px;
     /* background-color: blue; */
+
+`
+
+const WrapperBasket = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width:25%; */
+    height: 100%;
+    padding: 10px;
+    /* background-color: green; */
+
+    .img-basket {
+        color: #ffffff;
+        cursor: pointer;
+    }
+    
+    .wrapper-basket-popup {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        height: auto;
+        /* background-color: blue; */
+    }
 `
 
 

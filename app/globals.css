@@ -76,7 +76,7 @@ a {
 
 button {
   padding: 5px 0px;
-  min-width: 90px;
+  /* min-width: 90px; */
   font-size: 13px;    
   width:  auto;
   height: 30px;

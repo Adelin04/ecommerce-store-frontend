@@ -8,7 +8,7 @@ export async function checkIsAuth() {
     // const accessToken = cookies().get('accessToken')?.value;
     // const refreshToken = cookies().get('refreshToken')?.value;
 
-    
+
     if (!cookies().has('accessToken')) return false;
 
     const user = await fetch(`${URI}auth/profile`,

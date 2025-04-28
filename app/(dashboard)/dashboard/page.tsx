@@ -5,7 +5,7 @@ import { useMounted } from "@/app/component/useMounted";
 import PopUpProfile from "@/app/component/userSettings/profileSettings";
 import Loading from "@/app/loading";
 import { useUserStore } from "@/app/zustandStore/useUserStore";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import CreateNewProduct from "./component/product/createNewProduct";
 import CreateNewColor from "./component/product/createNewColor";
@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 export default function Dashboard() {
   const router = useRouter()
   const { hasMounted } = useMounted()
-  const { products } = useProductStore()
+  const { products, isLoadingProducts } = useProductStore()
   const { user } = useUserStore();
   const [btnClicked, setBtnClicked] = useState<any>(null);
   const [menus, setMenus] = useState(
@@ -50,40 +50,44 @@ export default function Dashboard() {
     setBtnClicked(buttonClicked)
   }
 
-  if (!hasMounted)
+  if (!hasMounted || isLoadingProducts)
     return <Loading />
+
   return (
     <Container className='container' style={{ overflow: `${btnClicked ? 'hidden' : 'auto'}` }}>
-      <Slider className='slider'>
-        <WrapperSlider className='wrapper-slider'>
-          {
-            user?.role === 'admin' &&
-            <AdminPanel>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                <div className='admin-panel-label'><label>Admin Panel</label></div>
-                {
-                  menus.menuAdmin.map((menu: any, index: number) => {
-                    return (
-                      <Button key={index} id={menu} style={{ color: btnClicked === menu.split(" ").join("").trim() ? 'salmon' : '#ffffff' }} onClick={(e: any) => { onOpenMenu(e.target.id) }}>{menu}</Button>
-                    )
-                  })
-                }
+      {
+        user?.role === 'admin' ?
+          <>
+            <Slider className='slider'>
+              <WrapperSlider className='wrapper-slider'>
+                <AdminPanel>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <div className='admin-panel-label'><label>Admin Panel</label></div>
+                    {
+                      menus.menuAdmin.map((menu: any, index: number) => {
+                        return (
+                          <Button key={index} id={menu} style={{ color: btnClicked === menu.split(" ").join("").trim() ? 'salmon' : '#ffffff' }} onClick={(e: any) => { onOpenMenu(e.target.id) }}>{menu}</Button>
+                        )
+                      })
+                    }
+                  </div>
+                  {/* <Button id='Notifications' style={{ color: 'salmon' }} onClick={() => {return redirect("/")}}>Go to Store</Button> */}
+                  <button id='Notifications' style={{ color: 'salmon' }} onClick={() => router.push("/")}>Go to Store</button>
+                </AdminPanel>
+              </WrapperSlider>
+            </Slider>
+
+            <div className='spacer'></div>
+
+            <Content>
+              <ProductsListAdmin products={products} />
+              <div style={btnClicked ? { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#b3b3b345', overflow: 'hidden' } : {}}>
+                {btnClicked && createElementCustom()}
               </div>
-              {/* <Button id='Notifications' style={{ color: 'salmon' }} onClick={() => {return redirect("/")}}>Go to Store</Button> */}
-              <button id='Notifications' style={{ color: 'salmon' }} onClick={() => router.push("/")}>Go to Store</button>
-            </AdminPanel>
-          }
-        </WrapperSlider>
-      </Slider>
+            </Content>
+          </> : <>{window.location.replace('/')}</>
 
-      <div className='spacer'></div>
-
-      <Content>
-        <ProductsListAdmin products={products} />
-        <div style={btnClicked ? { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#b3b3b345', overflow: 'hidden' } : {}}>
-          {btnClicked && createElementCustom()}
-        </div>
-      </Content>
+      }
     </Container >
   );
 }
@@ -93,7 +97,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    /* height: 100vh; */
+    height: 100vh;
 
     .spacer{
         display: flex;
@@ -146,7 +150,7 @@ const WrapperSlider = styled.div`
 const AdminPanel = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;

@@ -8,15 +8,15 @@ import { useCategoryStore } from './zustandStore/useCategoryStore';
 import Loading from './loading';
 import { useMounted } from './component/useMounted';
 import { useUserStore } from './zustandStore/useUserStore';
-import { fetchCategories, fetchProducts } from './actions/productActions';
-import { ICategory, IProduct, IUser } from './interfaces/interfaces';
-import { checkIsAuth } from './actions/userActions';
+// import { fetchCategories, fetchProducts } from './actions/productActions';
+// import { ICategory, IProduct, IUser } from './interfaces/interfaces';
+// import { checkIsAuth } from './actions/userActions';
 
 const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
     const { hasMounted } = useMounted()
     const { checkAuth, checkingAuth } = useUserStore();
     const { setProducts, products } = useProductStore();
-    const { setCategories, categories } = useCategoryStore();
+    const { setCategories, categories, isLoadingCategories } = useCategoryStore();
 
     async function fetchData() {
         // const categories: Array<ICategory> = await fetchCategories().then((data) => { return data });
@@ -43,9 +43,7 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
         return <Loading />
     return (
         <Container>
-            <Suspense fallback={<Loading />}>
                 {children}
-            </Suspense>
         </Container>
     )
 }

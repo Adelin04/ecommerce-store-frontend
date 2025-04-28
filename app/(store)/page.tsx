@@ -10,6 +10,7 @@ import zzz from '../../assets/zzz.svg';
 import Image from 'next/image';
 import Button from '../component/ui/Button';
 import { use, useEffect, useState } from 'react';
+import { useUserStore } from '../zustandStore/useUserStore';
 
 const HomePage = () => {
   const { hasMounted } = useMounted()
@@ -19,7 +20,7 @@ const HomePage = () => {
     No products available at the moment.
     Please leave your email and we will notify you when our site is ready.
     A lot of love, Team Boutique.
-    `);
+`);
 
   if (!hasMounted || isLoadingCategories)
     return <Loading />

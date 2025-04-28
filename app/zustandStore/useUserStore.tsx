@@ -67,12 +67,12 @@ export const useUserStore = create((set: any, get: any) => ({
     },
 
     checkAuth: async (/* user: IUser | null */) => {
+        
         try {
             set(() => ({ checkIsAuth: true, isLoadingUser: true }));
-
+            
             const userResult: any = await checkIsAuth().then((data) => { return data });
-
-            if (userResult) set(() => ({ user: userResult.user, isAuth: true, isAdmin: userResult.user?.role === 'admin' }));
+            if (userResult.success) set(() => ({ user: userResult.user, isAuth: true, isAdmin: userResult.user?.role === 'admin' }));
             else set(() => ({ user: null, isAuth: false }));
 
         } catch (error) {

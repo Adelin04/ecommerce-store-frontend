@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import { ICategory } from "../interfaces/interfaces";
 import { fetchCategories } from "../actions/productActions";
 
@@ -19,8 +18,11 @@ const INITIAL_STATE: CategoryState = {
 
 export const useCategoryStore = create((set: any, get: any) => ({
     categories: INITIAL_STATE.categories,
+    categorySelected: INITIAL_STATE.categorySelected,
+    isLoadingCategories: INITIAL_STATE.isLoadingCategories,
 
     setCategories: async () => {
+        
         set(() => ({ isLoadingCategories: true }));
         const fetchedCategories = await fetchCategories().then((data) => { return data });
 

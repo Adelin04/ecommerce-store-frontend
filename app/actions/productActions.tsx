@@ -3,8 +3,13 @@
 import { URI } from "../utils/URI";
 
 export async function fetchProducts() {
-    const response = await fetch(`${URI}products/getAllProducts`);
-    const products = await response.json();
+    const products = await fetch(`${URI}products/getAllProducts`)
+    .then((res) => { return res.json() })
+    .then((data) => {        
+        return data
+    })
+    // const products = await response.json();
+    // console.log({products});
 
     return products;
 }

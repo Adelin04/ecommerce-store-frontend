@@ -53,39 +53,42 @@ export default function Dashboard() {
   if (!hasMounted || isLoadingProducts)
     return <Loading />
 
+  if (!user) return window.location.replace('/')
+
   return (
     <Container className='container' style={{ overflow: `${btnClicked ? 'hidden' : 'auto'}` }}>
       {
-        user?.role === 'admin' ?
-          <>
-            <Slider className='slider'>
-              <WrapperSlider className='wrapper-slider'>
-                <AdminPanel>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <div className='admin-panel-label'><label>Admin Panel</label></div>
-                    {
-                      menus.menuAdmin.map((menu: any, index: number) => {
-                        return (
-                          <Button key={index} id={menu} style={{ color: btnClicked === menu.split(" ").join("").trim() ? 'salmon' : '#ffffff' }} onClick={(e: any) => { onOpenMenu(e.target.id) }}>{menu}</Button>
-                        )
-                      })
-                    }
-                  </div>
-                  {/* <Button id='Notifications' style={{ color: 'salmon' }} onClick={() => {return redirect("/")}}>Go to Store</Button> */}
-                  <button id='Notifications' style={{ color: 'salmon' }} onClick={() => router.push("/")}>Go to Store</button>
-                </AdminPanel>
-              </WrapperSlider>
-            </Slider>
+        user?.role === 'admin' &&
+        <>
+          <Slider className='slider'>
+            <WrapperSlider className='wrapper-slider'>
+              <AdminPanel>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                  <div className='admin-panel-label'><label>Admin Panel</label></div>
+                  {
+                    menus.menuAdmin.map((menu: any, index: number) => {
+                      return (
+                        <Button key={index} id={menu} style={{ color: btnClicked === menu.split(" ").join("").trim() ? 'salmon' : '#ffffff' }} onClick={(e: any) => { onOpenMenu(e.target.id) }}>{menu}</Button>
+                      )
+                    })
+                  }
+                </div>
+                {/* <Button id='Notifications' style={{ color: 'salmon' }} onClick={() => {return redirect("/")}}>Go to Store</Button> */}
+                <button id='Notifications' style={{ color: 'salmon' }} onClick={() => router.push("/")}>Go to Store</button>
+              </AdminPanel>
+            </WrapperSlider>
+          </Slider>
 
-            <div className='spacer'></div>
+          <div className='spacer'></div>
 
-            <Content>
-              <ProductsListAdmin products={products} />
-              <div style={btnClicked ? { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#b3b3b345', overflow: 'hidden' } : {}}>
-                {btnClicked && createElementCustom()}
-              </div>
-            </Content>
-          </> : <>{window.location.replace('/')}</>
+          <Content>
+            <ProductsListAdmin products={products} />
+            <div style={btnClicked ? { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#b3b3b345', overflow: 'hidden' } : {}}>
+              {btnClicked && createElementCustom()}
+            </div>
+          </Content>
+        </>
+
 
       }
     </Container >

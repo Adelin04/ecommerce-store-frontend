@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { IProduct } from "../interfaces/interfaces";
 
 interface BasketState {
-    basket: IProduct[],
+    basketProducts: IProduct[],
     counterProduct: number,
     totalPrice: number,
     addProductToBasket: (product: IProduct) => void,
@@ -11,7 +11,7 @@ interface BasketState {
 }
 
 const INITIAL_STATE = {
-    basket: [],
+    basketProducts: [],
     counterProduct: 0,
     totalPrice: 0,
     addProductToBasket: (product: IProduct) => { },
@@ -20,16 +20,22 @@ const INITIAL_STATE = {
 } as BasketState;
 
 export const useBasketStore = create((set: any, get: any) => ({
-    basket: INITIAL_STATE.basket,
+    basketProducts: INITIAL_STATE.basketProducts,
     counterProduct: INITIAL_STATE.counterProduct,
     totalPrice: INITIAL_STATE.totalPrice,
 
     addProductToBasket: (product: IProduct, quantity: number, size: string) => {
         console.log(product, quantity, size);
+
+        /* product.quantityPerSize.map((detailProduct: any) => {
+            if (detailProduct.size === size) {
+                detailProduct.quantity += quantity;
+            }
+        }); */
         
-        // set((state: any) => ({ basket: [...state.basket, product] }))
-        // set((state: any) => ({ counterProduct: state.counterProduct + 1 }))
-        // set((state: any) => ({ totalPrice: state.totalPrice + product.price }))
+        set((state: any) => ({ basketProducts: [...state.basketProducts, product] }))
+        set((state: any) => ({ counterProduct: state.counterProduct + 1 }))
+        set((state: any) => ({ totalPrice: state.totalPrice + product.price }))
 
         // console.log(get().basket);
         // console.log(get().totalPrice);

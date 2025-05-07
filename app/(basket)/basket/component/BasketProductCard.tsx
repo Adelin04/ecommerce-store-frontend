@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { IProduct } from '@/app/interfaces/interfaces';
 import { useProductStore } from '@/app/zustandStore/useProductStore';
 import { useRouter } from 'next/navigation';
-import EditIcon from '../../../../assets/edit_icon.svg';
 import DeleteIcon from '../../../../assets/delete_icon.svg';
 import Image from 'next/image';
-import EditProduct from '@/app/(dashboard)/dashboard/component/product/editProduct';
+import Button from '@/app/component/ui/Button';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { useBasketStore } from '@/app/zustandStore/useBasketStore';
 
 interface PropsBasketCard {
     product: IProduct | null
@@ -15,14 +16,15 @@ interface PropsBasketCard {
 export default function BasketProductCard({ product }: PropsBasketCard) {
     const router = useRouter()
     const { selectProduct } = useProductStore();
+    const { basketProducts, removeProductFromBasket } = useBasketStore();
     const { name, color, price, brand, size, currency, gender, category, images, seller } = product as IProduct | any
     const [open, setOpen] = React.useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const handleClick = () => {
         product && selectProduct(product._id)
         product && router.push(`/product-details/${product._id}`);
     };
-    console.log(product);
 
     return (
         <Container className='container-basket-product-card' style={{ overflow: `${open ? 'hidden' : 'auto'}` }}>
@@ -48,8 +50,24 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
                     <p className='category'>{category.category}</p>
                 </div>
 
-                <div>
-                    {/* <p>{product.quantity}</p> */}
+                <div className='wrapper-quantity'>
+                    <Button
+                        className='button-plus-quantity'
+                        style={{ marginRight: '10px' }}
+                        onClick={() => { quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1); }}>
+                        <i className="" ><FaMinus /></i>
+                    </Button>
+
+                    <div className='quantity' >
+                        {quantity}
+                    </div>
+
+                    <Button
+                        className='button-minus-quantity'
+                        style={{ marginLeft: '10px' }}
+                        onClick={() => { setQuantity(quantity + 1); }}>
+                        <i className=""><FaPlus /></i>
+                    </Button>
                 </div>
 
                 <div className='wrapper-price-product-card'>
@@ -58,10 +76,8 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
 
             </WrapperBasketProductCard>
 
-            {open && <EditProduct product={product as IProduct} user={null} close={() => setOpen(false)} />}
-
             <WrapperButtonsBasketProductCard className='wrapper-buttons-product-card' >
-                <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} />
+                <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeProductFromBasket(product._id)} />
             </WrapperButtonsBasketProductCard>
 
 
@@ -133,8 +149,47 @@ const WrapperBasketProductCard = styled.div`
             margin: 5px;
             text-align: center;
             border-radius: 10px;
-            cursor: pointer;
         }
+
+        .wrapper-quantity-size {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 5px;
+    }
+    .wrapper-quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        margin: 5px;
+    }
+
+    .quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 25%;
+        font-size: 13px;
+        color: #ffffff;
+        background-color: var(--button-color);
+    }   
+    
+    .button-plus-quantity,
+    .button-minus-quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+        font-size: 13px;
+        color: #ffffff;
+        background-color: var(--button-color);
+    }
     `
 
 const WrapperButtonsBasketProductCard = styled.div`

@@ -7,11 +7,10 @@ import Image from 'next/image';
 import { useProductStore } from '../zustandStore/useProductStore';
 
 const Logo = () => {
-    const { resetSelectedProducts } = useProductStore();
 
     return (
         <Container className="log-container">
-            <Link className='link-logo' href="/" onClick={() => resetSelectedProducts()}>
+            <Link className='link-logo' href="/" >
                 <Image className='img-logo' priority src={LogoIcon} alt='Logo' />
                 <LabelLogo> BOUTIQUE </LabelLogo>
             </Link>

@@ -96,6 +96,14 @@ const NavBar = ({ navBarMenu }: any) => {
                         <WrapperUserProfileResponsive className='wrapper-user-profile'>
                             <UserProfile user={user} />
                         </WrapperUserProfileResponsive>
+                        <WrapperBasket className='wrapper-basket'>
+                            <Link href={'/basket'}>
+                                <Image className='img-basket' src={basketLogo} alt="Basket" width={40} height={40} />
+                            </Link>
+                            <div className='wrapper-basket-popup' >
+                                <BasketPopUp counter={counterProduct} />
+                            </div>
+                        </WrapperBasket>
                     </WrapperLogoUserProfile>
 
                     <MenuNavBar className='wrapper-nav-link'>
@@ -106,6 +114,7 @@ const NavBar = ({ navBarMenu }: any) => {
                                 </WrapperLink>
                             )
                         })}
+
                     </MenuNavBar>
 
                 </ResponsiveBrowser>)

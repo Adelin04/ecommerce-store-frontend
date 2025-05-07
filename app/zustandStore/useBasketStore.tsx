@@ -27,24 +27,20 @@ export const useBasketStore = create((set: any, get: any) => ({
     addProductToBasket: (product: IProduct, quantity: number, size: string) => {
         console.log(product, quantity, size);
 
-        /* product.quantityPerSize.map((detailProduct: any) => {
-            if (detailProduct.size === size) {
-                detailProduct.quantity += quantity;
-            }
-        }); */
-        
+
         set((state: any) => ({ basketProducts: [...state.basketProducts, product] }))
         set((state: any) => ({ counterProduct: state.counterProduct + 1 }))
         set((state: any) => ({ totalPrice: state.totalPrice + product.price }))
 
-        // console.log(get().basket);
-        // console.log(get().totalPrice);
 
     },
+    removeProductFromBasket: (id: string | number) => {
+        set((state: any) => ({ totalPrice: state.totalPrice - parseFloat(get().basketProducts.filter((product: IProduct) => id === product._id)[0]?.price) }))
+        set((state: any) => ({ basketProducts: state.basketProducts.filter((product: IProduct) => product._id !== id) }))
+        set((state: any) => ({ counterProduct: state.counterProduct - 1 }))
+    },
 
-    // removeProductFromBasket: (id) =>
-    //     set((state) => ({ basket: state.basket.filter((product) => product.id !== id) })),
-    // clearBasket: () => set({ basket: [] }),
+    clearBasket: () => { set({ basketProducts: [] }), set({ counterProduct: 0 }), set({ totalPrice: 0 }) },
 }
 
 ));

@@ -141,6 +141,7 @@ const Container = styled.div`
     border-radius: 10px;
     border-top: transparent;
     border: 1px solid #fa807273;
+    background: #a1a1a196;
     
     .img-product-card {
         display: flex;

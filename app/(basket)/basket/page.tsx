@@ -7,31 +7,18 @@ import Button from '@/app/component/ui/Button';
 import styled from 'styled-components';
 import BasketProduct from './component/BasketProductCard';
 import { useUserStore } from '@/app/zustandStore/useUserStore';
-
+import { IProduct } from '@/app/interfaces/interfaces';
+import Clear_basket from '../../../assets/clear_basket.svg';
+import Image from 'next/image';
 
 
 export default function BasketPage() {
     const { user } = useUserStore();
-    const { basketProducts, counterProduct, totalPrice } = useBasketStore();
-    const [isCheckout, setIsCheckout] = useState(false);
+    const { basketProducts, counterProduct, totalPrice, clearBasket } = useBasketStore();
     const router = useRouter();
 
-    // const handleRemoveProduct = (productId: number) => {
-    //     removeProductFromBasket(productId);
-    // }
-
-    // const handleCheckout = () => {
-    //     setIsCheckout(true);
-    // }
-
-    // const handleBackToStore = () => {
-    //     setIsCheckout(false);
-    // }
-
-    console.log({ basketProducts, counterProduct, totalPrice });
-
     return (
-        <Container>
+        <Container className='container-basket'>
             <WrapperUserName>
                 <h3 className="basket-title">
                     {" BASKET "}
@@ -45,26 +32,30 @@ export default function BasketPage() {
             </WrapperUserName>
 
             <WrapperProducts>
-                {basketProducts.map((product: any) => (
+                {basketProducts.map((product: IProduct, key: number) => (
                     <BasketProduct
-                        key={product.id}
+                        key={key}
                         product={product}
                     />
                 ))}
             </WrapperProducts>
 
             <WrapperSummary className='wrapper-summary'>
-                <p>Total: ${totalPrice}</p>
+                <div className='summary'>
+                    <p> Items: {counterProduct}</p>
+                    <p>Total: ${totalPrice}</p>
+                    <div className='wrapper-clear-basket-button'>
+                        <Image className='clear-basket-button' src={Clear_basket} alt={'delete icon'} width={40} height={40} onClick={() => clearBasket()} />
+                    </div>
+                </div>
             </WrapperSummary>
 
-            <WrapperButton>
-                {/*                 {!isCheckout && (
-                    <Button onClick={handleCheckout}>Checkout</Button>
-                )}
-                {isCheckout && (
-                    <Button onClick={handleBackToStore}>Back to Store</Button>
-                )} */}
-            </WrapperButton>
+            {
+                basketProducts.length > 0 && <WrapperButton>
+                    <Button className='next-step-button' disabled={basketProducts.length === 0} onClick={() => router.push('/Address')}> NEXT STEP </Button>
+                </WrapperButton>
+            }
+
         </Container>
     );
 }
@@ -87,11 +78,6 @@ const WrapperUserName = styled.div`
         margin: 5px;
         padding: 5px;
         border-radius: 10px;
-
-        /* .basket-title {
-            margin: 5px;
-            padding: 5px;
-        } */
         
         .basket-title,
         .user-name-basket{
@@ -100,27 +86,57 @@ const WrapperUserName = styled.div`
             padding: 5px;
 
         }
-    `
+`
 
 const WrapperProducts = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: start;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
 `
 
 const WrapperSummary = styled.div`
-
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 300px;
-    height: 250px;
-    background: green
+    align-items: end;
+    margin-top: 25px;
+    width: 100%;
+    height: 100%;
+    /* background: green; */
+    
+    .summary{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 300px;
+        height: 250px;
+        margin: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        background: var(--button-color);
+    }
+
+    .wrapper-clear-basket-button {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        width: 100%;
+        margin: 0px 5px;
+    }
+
+    .clear-basket-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        cursor: pointer;
+    }
 
 `
 
@@ -130,4 +146,9 @@ const WrapperButton = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+
+    .next-step-button {
+        margin: 5px;
+        padding: 5px;
+    }
 `

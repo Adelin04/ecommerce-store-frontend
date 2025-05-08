@@ -16,16 +16,16 @@ export default function BasketPage() {
     const { user } = useUserStore();
     const { basketProducts, counterProduct, totalPrice, clearBasket } = useBasketStore();
     const router = useRouter();
-
+    
     return (
         <Container className='container-basket'>
             <WrapperUserName>
                 <h3 className="basket-title">
-                    {" BASKET "}
+                    {" SHOPPING CART "}
                 </h3>
-                <h3 className="basket-title">
+                {user && <h3 className="basket-title">
                     {"|"}
-                </h3>
+                </h3>}
                 <h3 className="user-name-title">
                     {user && `${(user?.firstName.toUpperCase()) || ""} `}
                 </h3>

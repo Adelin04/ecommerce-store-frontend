@@ -16,10 +16,11 @@ interface PropsBasketCard {
 export default function BasketProductCard({ product }: PropsBasketCard) {
     const router = useRouter()
     const { selectProduct } = useProductStore();
-    const { basketProducts, removeProductFromBasket } = useBasketStore();
+    const {  removeProductFromBasket, decreaseQuantity, increaseQuantity } = useBasketStore();
     const { name, color, price, brand, size, currency, gender, category, images, seller } = product as IProduct | any
     const [open, setOpen] = React.useState(false);
     const [quantity, setQuantity] = useState(1);
+
 
     const handleClick = () => {
         product && selectProduct(product._id)
@@ -54,7 +55,7 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
                     <Button
                         className='button-plus-quantity'
                         style={{ marginRight: '10px' }}
-                        onClick={() => { quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1); }}>
+                        onClick={() => { quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1); product && decreaseQuantity(product?._id) }}>
                         <i className="" ><FaMinus /></i>
                     </Button>
 
@@ -65,7 +66,7 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
                     <Button
                         className='button-minus-quantity'
                         style={{ marginLeft: '10px' }}
-                        onClick={() => { setQuantity(quantity + 1); }}>
+                        onClick={() => { setQuantity(quantity + 1);product && increaseQuantity(product?._id) }}>
                         <i className=""><FaPlus /></i>
                     </Button>
                 </div>

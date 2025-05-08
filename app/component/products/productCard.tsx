@@ -19,15 +19,23 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
     const { selectProduct } = useProductStore();
     const { addProductToBasket } = useBasketStore();
 
+    const [toggle, setToggle] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0)
     const [productSize, setProductSize] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [sizesProductAvailable, setSizesProductAvailable] = useState(['S', 'M', 'L', 'XL']);
 
-    // console.log(product?.price);
 
 
     const handleAddToCart = () => {
+        if (!productSize) {
+            setToggle(true)
+            setInterval(() => setToggle(false), 3000)
+
+            return
+        }
+
+        if (productSize) { setToggle(false) }
 
         // GET THE LOCALSTORAGE BASKET
         let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
@@ -110,14 +118,14 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
                                 })
                             }
                         </select>
-                        {(productSize === 'None' || productSize === '') && <Image className='img-exclamation' src={exclamation} alt="exclamation" width={50} height={50} />}
+                        {toggle && <Image className='img-exclamation' src={exclamation} alt="exclamation" width={50} height={50} />}
                     </div>
 
                 </div>
 
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                    <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' disabled={(productSize === 'None' || productSize === '') ? true : false} onClick={handleAddToCart}> Add to cart </Button>
+                    <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' onClick={() => { handleAddToCart() }}> Add to cart </Button>
                 </div>
 
             </ContainerAddToCart>

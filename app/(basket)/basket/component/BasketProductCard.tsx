@@ -16,7 +16,7 @@ interface PropsBasketCard {
 export default function BasketProductCard({ product }: PropsBasketCard) {
     const router = useRouter()
     const { selectProduct } = useProductStore();
-    const {  removeProductFromBasket, decreaseQuantity, increaseQuantity } = useBasketStore();
+    const { removeProductFromBasket, decreaseQuantity, increaseQuantity, counterProduct } = useBasketStore();
     const { name, color, price, brand, size, currency, gender, category, images, seller } = product as IProduct | any
     const [open, setOpen] = React.useState(false);
     const [quantity, setQuantity] = useState(1);
@@ -30,11 +30,9 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
     return (
         <Container className='container-basket-product-card' style={{ overflow: `${open ? 'hidden' : 'auto'}` }}>
 
-
-
             <WrapperBasketProductCard className='wrapper-basket-product-card' >
                 <div className='wrapper-img-product-card'>
-                    <img className='img-product-card' src={images[0].image} alt={product?.name} onClick={handleClick} />
+                    <img className='img-product-card' src={product?.images[0].image} alt={product?.name} onClick={handleClick} />
                 </div>
 
                 <div className='wrapper-info1-product-card'>
@@ -55,18 +53,18 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
                     <Button
                         className='button-plus-quantity'
                         style={{ marginRight: '10px' }}
-                        onClick={() => { quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1); product && decreaseQuantity(product?._id) }}>
+                        onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
                         <i className="" ><FaMinus /></i>
                     </Button>
 
                     <div className='quantity' >
-                        {quantity}
+                        {counterProduct}
                     </div>
 
                     <Button
                         className='button-minus-quantity'
                         style={{ marginLeft: '10px' }}
-                        onClick={() => { setQuantity(quantity + 1);product && increaseQuantity(product?._id) }}>
+                        onClick={() => { product && increaseQuantity(product?._id) }}>
                         <i className=""><FaPlus /></i>
                     </Button>
                 </div>

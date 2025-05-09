@@ -37,26 +37,26 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
 
         if (productSize) { setToggle(false) }
 
-        // GET THE LOCALSTORAGE BASKET
-        let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
+        // // GET THE LOCALSTORAGE BASKET
+        // let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
 
-        //  FILTERED LOCALSTORAGE
-        let filterLocalStorage: any = localStorage_BASKET && localStorage_BASKET.filter(
-            (item: any) => item.productId === product.id && item.size === productSize
-        );
+        // //  FILTERED LOCALSTORAGE
+        // let filterLocalStorage: any = localStorage_BASKET && localStorage_BASKET.filter(
+        //     (item: any) => item.productId === product.id && item.size === productSize
+        // );
 
-        //  CHECK IF THE 'EXISTPRODUCT' IS AN ARRAY AND IF IT IS GREATER THEN 0...
-        //  IF CONDITION IS TRUE THIS MEANS IT IS THE FIRST PRODUCT ADDED
-        if (filterLocalStorage && filterLocalStorage.length > 0) {
-            filterLocalStorage[0].quantity += quantity;
-        } else {
-            // localStorage_BASKET = []
-            localStorage_BASKET.push({
-                productId: product.id,
-                quantity: quantity,
-                size: productSize,
-            });
-        }
+        // //  CHECK IF THE 'EXISTPRODUCT' IS AN ARRAY AND IF IT IS GREATER THEN 0...
+        // //  IF CONDITION IS TRUE THIS MEANS IT IS THE FIRST PRODUCT ADDED
+        // if (filterLocalStorage && filterLocalStorage.length > 0) {
+        //     filterLocalStorage[0].quantity += quantity;
+        // } else {
+        //     // localStorage_BASKET = []
+        //     localStorage_BASKET.push({
+        //         productId: product._id,
+        //         quantity: quantity,
+        //         size: productSize,
+        //     });
+        // }
 
         //  ZUSTAND basketStore - ADD THE NEW PRODUCT IN SHOPPING CART LIST 
         addProductToBasket(
@@ -65,10 +65,6 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
             productSize
         )
 
-
-
-        //  SET THE LOCALSTORAGE AFTER UPDATE THE BASKET
-        localStorage.setItem("BASKET", JSON.stringify(localStorage_BASKET));
 
         setProductSize('');
     };

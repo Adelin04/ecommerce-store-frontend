@@ -271,7 +271,7 @@ const WrapperUserProfileResponsive = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0px 20px;
+    padding: 0px 10px;
     /* background-color: green; */
     `
 

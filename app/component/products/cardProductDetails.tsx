@@ -35,7 +35,7 @@ export default function cardProductDetails({ product }: { product: IProduct | an
         } else {
             // localStorage_BASKET = []
             localStorage_BASKET.push({
-                productId: product.id,
+                productId: product._id,
                 quantity: quantity,
                 size: productSize,
             });

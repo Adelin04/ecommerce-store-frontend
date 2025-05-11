@@ -16,7 +16,7 @@ export default function BasketPage() {
     const { user } = useUserStore();
     const { basketProducts, counterProduct, totalPrice, clearBasket } = useBasketStore();
     const router = useRouter();
-
+    
     return (
         <Container className='container-basket'>
             <WrapperUserName>

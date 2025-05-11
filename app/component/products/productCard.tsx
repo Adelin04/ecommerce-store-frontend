@@ -59,6 +59,7 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
         // }
 
         //  ZUSTAND basketStore - ADD THE NEW PRODUCT IN SHOPPING CART LIST 
+        
         addProductToBasket(
             product,
             quantity,

@@ -13,7 +13,7 @@ interface PropsBasketCard {
     product: IProduct | null
 }
 
-export default function BasketProductCard({ product }: PropsBasketCard) {
+export default function BasketProductCard({ product }: any) {
     const router = useRouter()
     const { selectProduct } = useProductStore();
     const { removeProductFromBasket, decreaseQuantity, increaseQuantity, counterProduct } = useBasketStore();
@@ -26,6 +26,7 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
         product && selectProduct(product._id)
         product && router.push(`/product-details/${product._id}`);
     };
+
 
     return (
         <Container className='container-basket-product-card' style={{ overflow: `${open ? 'hidden' : 'auto'}` }}>
@@ -43,7 +44,8 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
 
                 <div className='wrapper-info2-product-card'>
                     <p className='color'>{color.color}</p>
-                    <p className='size'>{size.size}</p>
+                    {/* <p className='size'>{product?.productQtySize[0].size}</p> */}
+                    {Array.isArray(product?.productQtySize) }
                     <p className='seller'>{seller?.toUpperCase()}</p>
                     <p className='gender'>{gender.gender}</p>
                     <p className='category'>{category.category}</p>
@@ -58,7 +60,8 @@ export default function BasketProductCard({ product }: PropsBasketCard) {
                     </Button>
 
                     <div className='quantity' >
-                        {counterProduct}
+                        {console.log(product?.productQtySize[0].quantity)}
+                        {product?.productQtySize[0].quantity}
                     </div>
 
                     <Button

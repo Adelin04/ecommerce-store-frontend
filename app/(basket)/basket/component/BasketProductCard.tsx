@@ -21,11 +21,11 @@ export default function BasketProductCard({ product }: any) {
     const [open, setOpen] = React.useState(false);
     const [quantity, setQuantity] = useState(1);
 
-
     const handleClick = () => {
         product && selectProduct(product._id)
         product && router.push(`/product-details/${product._id}`);
     };
+    console.log('...', product);
 
 
     return (
@@ -44,33 +44,38 @@ export default function BasketProductCard({ product }: any) {
 
                 <div className='wrapper-info2-product-card'>
                     <p className='color'>{color.color}</p>
-                    {/* <p className='size'>{product?.productQtySize[0].size}</p> */}
-                    {Array.isArray(product?.productQtySize) }
+
                     <p className='seller'>{seller?.toUpperCase()}</p>
                     <p className='gender'>{gender.gender}</p>
                     <p className='category'>{category.category}</p>
                 </div>
 
-                <div className='wrapper-quantity'>
-                    <Button
-                        className='button-plus-quantity'
-                        style={{ marginRight: '10px' }}
-                        onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
-                        <i className="" ><FaMinus /></i>
-                    </Button>
 
-                    <div className='quantity' >
-                        {console.log(product?.productQtySize[0].quantity)}
-                        {product?.productQtySize[0].quantity}
-                    </div>
 
-                    <Button
-                        className='button-minus-quantity'
-                        style={{ marginLeft: '10px' }}
-                        onClick={() => { product && increaseQuantity(product?._id) }}>
-                        <i className=""><FaPlus /></i>
-                    </Button>
+                <div className='container-quantity' >
+                    {product.productQtySize.map((item: any, index: number) => (
+
+                        <div className='wrapper-btns-quantity-size' key={index}>
+                            <Button
+                                className='button-plus-quantity'
+                                style={{ marginRight: '10px' }}
+                                onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
+                                <i className="" ><FaMinus /></i>
+                            </Button>
+                            <p className='size' key={index}>{item?.size}</p>
+                            <p className='quantity' key={index}>{item?.quantity}</p>
+                            <Button
+                                className='button-minus-quantity'
+                                style={{ marginLeft: '10px' }}
+                                onClick={() => { product && increaseQuantity(product?._id) }}>
+                                <i className=""><FaPlus /></i>
+                            </Button>
+                        </div>
+
+                    ))}
                 </div>
+
+
 
                 <div className='wrapper-price-product-card'>
                     <p className='price'>{price}{" "}{currency.currency}</p>
@@ -93,10 +98,12 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: auto;
+        height: 100%;
         margin: 3px;
+        padding: 5px 0px;
         border: 1px solid salmon;
         border-radius: 10px;
+        overflow: hidden;
     `
 
 const WrapperBasketProductCard = styled.div`
@@ -106,7 +113,7 @@ const WrapperBasketProductCard = styled.div`
         width: 80%;
         height: 100%;
         margin: 5px 0px;
-        padding: 5px;
+        padding: 10px;
         border-radius: 10px;
 
         .wrapper-img-product-card{
@@ -153,40 +160,35 @@ const WrapperBasketProductCard = styled.div`
             border-radius: 10px;
         }
 
-        .wrapper-quantity-size {
+        .wrapper-btns-quantity-size {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         width: 100%;
         margin: 5px;
     }
-    .wrapper-quantity {
+    
+    .container-quantity {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         width: auto;
-        margin: 5px;
-    }
-
-    .quantity {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 25px;
-        height: 25px;
-        border-radius: 25%;
+        height: auto;
         font-size: 13px;
+        border-radius: 5px;
         color: #ffffff;
         background-color: var(--button-color);
     }   
+
+
     
     .button-plus-quantity,
     .button-minus-quantity {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 35px;
+        width: 25px;
         height: 35px;
         font-size: 13px;
         color: #ffffff;

@@ -54,23 +54,26 @@ export const useBasketStore = create((set: any, get: any) => ({
         }
 
         if(existProduct.productQtySize.find((item: any) => item.size === size)) {
-            existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;
+            console.log('...',existProduct.price);
+            
+            existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;;
             productQtySizeUpdated['quantity'] = existProduct.productQtySize.find((item: any) => item.size === size).quantity;
             productQtySizeUpdated['size'] = existProduct.productQtySize.find((item: any) => item.size === size).size;
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
+            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price}))
+            
         } else {
             existProduct.productQtySize.push(productQtySize);
             productQtySizeUpdated['quantity'] = productQtySize.quantity;
             productQtySizeUpdated['size'] = productQtySize.size;
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
+            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price}))
         }
 
         //  ADD THE NEW PRODUCT AND INCREASE THE COUNTER WITH NEW QUANTITY ADDED
         // set((state: any) => ({ basketProducts: [...state.basketProducts, existProduct] }))
 
-        console.log(get().basketProducts);
         
-        set((state: any) => ({ totalPrice: state.totalPrice + product.price }))
 
 
     },

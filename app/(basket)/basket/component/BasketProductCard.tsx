@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IProduct } from '@/app/interfaces/interfaces';
 import { useProductStore } from '@/app/zustandStore/useProductStore';
@@ -19,13 +19,23 @@ export default function BasketProductCard({ product }: any) {
     const { removeProductFromBasket, decreaseQuantity, increaseQuantity, counterProduct } = useBasketStore();
     const { name, color, price, brand, size, currency, gender, category, images, seller } = product as IProduct | any
     const [open, setOpen] = React.useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(0);
 
+    useEffect(() => {
+        product && product.productQtySize.map((item: any) => {
+                setQuantity(quantity + item.quantity)
+                console.log('item',item.quantity);
+                console.log('quantity',quantity);
+                
+            })
+
+        
+    }, []);
+    
     const handleClick = () => {
         product && selectProduct(product._id)
         product && router.push(`/product-details/${product._id}`);
     };
-    console.log('...', product);
 
 
     return (
@@ -51,41 +61,56 @@ export default function BasketProductCard({ product }: any) {
                 </div>
 
 
+                <div className='wrapper-info3-product-card' style={{ display: 'flex', flexDirection: 'row' }}>
 
-                <div className='container-quantity' >
-                    {product.productQtySize.map((item: any, index: number) => (
+                    <div className='container-quantity' >
+                        {product.productQtySize.map((item: any, index: number) => (
+                            <div key={index} className='wrapper-btns-quantity-size-icon'>
+                                <div  className='wrapper-btns-quantity-size' >
+                                
+                                    <div className='wrapper-btns'>
+                                        <Button
+                                            className='button-plus-quantity'
+                                            style={{ marginRight: '10px' }}
+                                            onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
+                                            <i className="" ><FaMinus /></i>
+                                        </Button>
+                                            <p className='size' >{item?.size}</p>
+                                            <p className='quantity' >{item?.quantity}</p>
+                                        <Button
+                                            className='button-minus-quantity'
+                                            style={{ marginLeft: '10px' }}
+                                            onClick={() => { product && increaseQuantity(product?._id) }}>
+                                            <i className=""><FaPlus /></i>
+                                        </Button>
+                                    </div>
 
-                        <div className='wrapper-btns-quantity-size' key={index}>
-                            <Button
-                                className='button-plus-quantity'
-                                style={{ marginRight: '10px' }}
-                                onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
-                                <i className="" ><FaMinus /></i>
-                            </Button>
-                            <p className='size' key={index}>{item?.size}</p>
-                            <p className='quantity' key={index}>{item?.quantity}</p>
-                            <Button
-                                className='button-minus-quantity'
-                                style={{ marginLeft: '10px' }}
-                                onClick={() => { product && increaseQuantity(product?._id) }}>
-                                <i className=""><FaPlus /></i>
-                            </Button>
-                        </div>
+                                    
+                                    <p className='price'>{product.price * item?.quantity}{" "}{currency.currency}</p>
+                                    <div className='wrapper-button-delete'>
+                                        <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeProductFromBasket(product._id)} />
+                                    </div>
 
-                    ))}
+                                </div>
+                            </div>
+
+                        ))}
+                    </div>
+
+
                 </div>
 
-
-
+{/* 
                 <div className='wrapper-price-product-card'>
-                    <p className='price'>{price}{" "}{currency.currency}</p>
-                </div>
+                    
+                    <p className='price'>{price * quantity}{" "}{currency.currency}</p>
+                </div> */}
 
             </WrapperBasketProductCard>
 
-            <WrapperButtonsBasketProductCard className='wrapper-buttons-product-card' >
+            {/* <WrapperButtonsBasketProductCard className='wrapper-buttons-product-card' >
                 <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeProductFromBasket(product._id)} />
-            </WrapperButtonsBasketProductCard>
+            </WrapperButtonsBasketProductCard> */}
 
 
         </Container>
@@ -97,7 +122,7 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        width: 90%;
         height: 100%;
         margin: 3px;
         padding: 5px 0px;
@@ -110,7 +135,7 @@ const WrapperBasketProductCard = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 80%;
+        width: 90%;
         height: 100%;
         margin: 5px 0px;
         padding: 10px;
@@ -138,6 +163,7 @@ const WrapperBasketProductCard = styled.div`
         }
 
         .wrapper-info1-product-card,
+        .wrapper-info3-product-card,
         .wrapper-info2-product-card {
             display: flex;
             flex-direction: column;
@@ -149,24 +175,32 @@ const WrapperBasketProductCard = styled.div`
             border-radius: 10px;
         }
     
-        p{
+        .name,
+        .brand,
+        .color,
+        .seller,
+        .gender,
+        .category{
             display: flex;
             justify-content: center;
             align-items: center;
             width: auto;
+            height: auto;
+            margin: 5px;
+            border-radius: 5px;
+            color: #ffffff;
+            /* background-color: var(--button-color); */
+        }
+     
+        .wrapper-btns-quantity-size-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
             height: 100%;
             margin: 5px;
-            text-align: center;
-            border-radius: 10px;
         }
-
-        .wrapper-btns-quantity-size {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 5px;
-    }
+       
     
     .container-quantity {
         display: flex;
@@ -175,12 +209,44 @@ const WrapperBasketProductCard = styled.div`
         align-items: center;
         width: auto;
         height: auto;
+        padding: 5px;
         font-size: 13px;
         border-radius: 5px;
         color: #ffffff;
-        background-color: var(--button-color);
+        /* background-color: var(--button-color); */
     }   
+    
+/*     .container-quantity p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        height: auto;
+        margin: 5px;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: var(--button-color);
+    } */
+    
+    .wrapper-btns-quantity-size {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 5px;
+        padding: 0px 5px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+    }
 
+    .wrapper-btns{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+
+        
+    }
 
     
     .button-plus-quantity,
@@ -194,40 +260,62 @@ const WrapperBasketProductCard = styled.div`
         color: #ffffff;
         background-color: var(--button-color);
     }
-    `
 
-const WrapperButtonsBasketProductCard = styled.div`
+    .wrapper-button-delete {
         display: flex;
         justify-content: center;
         align-items: center;
         width: auto;
         height: 100%;
-        margin: auto;
-        padding: 5px;
+        margin: 5px;
         border-radius: 10px;
-    
-        .button-edit, .button-delete{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-        }
+    }
+
+    .button-delete {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        padding: 5px;
+        margin: 2px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .price {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        height: 100%;
+        margin: 5px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+// const WrapperButtonsBasketProductCard = styled.div`
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         width: auto;
+//         height: 100%;
+//         margin: auto;
+//         padding: 5px;
+//         border-radius: 10px;
         
-        .button-delete,
-        .button-edit{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 40px;
-            padding: 5px;
-            margin: 2px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-        }
-    `
+//         .button-delete,
+//         .button-edit{
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             width: 100%;
+//             height: 40px;
+//             padding: 5px;
+//             margin: 2px;
+//             border-radius: 10px;
+//             border: none;
+//             cursor: pointer;
+//         }
+//     `

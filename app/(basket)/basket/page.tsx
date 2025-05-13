@@ -17,7 +17,7 @@ export default function BasketPage() {
     const { basketProducts, counterProduct, totalPrice, clearBasket } = useBasketStore();
     const router = useRouter();
 
-    
+
     return (
         <Container className='container-basket'>
             <WrapperUserName>
@@ -34,7 +34,6 @@ export default function BasketPage() {
 
             <WrapperProducts>
                 {basketProducts.map((product: IProduct, key: number) => (
-
                     <BasketProduct
                         key={key}
                         product={product}
@@ -47,7 +46,12 @@ export default function BasketPage() {
                     <p> Items: {counterProduct}</p>
                     <p>Total: ${totalPrice}</p>
                     <div className='wrapper-clear-basket-button'>
-                        <Image className='clear-basket-button' src={Clear_basket} alt={'delete icon'} width={40} height={40} onClick={() => clearBasket()} />
+                        <Button className='clear-basket-button' disabled={basketProducts.length === 0}  onClick={() => clearBasket()} >
+                            <span>
+                                {'CLEAR BASKET'}
+                            </span>
+                            <Image className='clear-basket-button-image' src={Clear_basket} alt={'delete icon'} width={40} height={40}/>
+                        </Button>
                     </div>
                 </div>
             </WrapperSummary>
@@ -118,6 +122,7 @@ const WrapperSummary = styled.div`
         width: 300px;
         height: 250px;
         margin: 5px;
+        margin-right: 68px;
         padding: 5px;
         border-radius: 10px;
         border: 1px solid var(--border-color);
@@ -137,7 +142,19 @@ const WrapperSummary = styled.div`
         justify-content: center;
         align-items: center;
         margin: 5px;
+        width: 150px;
+        height: 50px;
         cursor: pointer;
+
+        span{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+        }
     }
 
 `

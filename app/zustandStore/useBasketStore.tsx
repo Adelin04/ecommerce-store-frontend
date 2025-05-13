@@ -25,9 +25,9 @@ export const useBasketStore = create((set: any, get: any) => ({
     totalPrice: INITIAL_STATE.totalPrice,
 
     addProductToBasket: (product: IProduct, quantity: number, size: string) => {
-        console.log(product, quantity, size);
+        // console.log(product, quantity, size);
 
-        
+                console.log('...',product);
         let newProduct: any = product;
         let productQtySizeUpdated: any = {}
         let productQtySize = {
@@ -50,11 +50,12 @@ export const useBasketStore = create((set: any, get: any) => ({
             //  ADD THE NEW PRODUCT AND INCREASE THE COUNTER WITH NEW QUANTITY ADDED
             set((state: any) => ({ basketProducts: [...state.basketProducts, newProduct] }))
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
+            set((state: any) => ({ totalPrice: state.totalPrice + newProduct.price}))
             return
         }
 
         if(existProduct.productQtySize.find((item: any) => item.size === size)) {
-            console.log('...',existProduct.price);
+            // console.log('...',existProduct.price);
             
             existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;;
             productQtySizeUpdated['quantity'] = existProduct.productQtySize.find((item: any) => item.size === size).quantity;
@@ -69,12 +70,6 @@ export const useBasketStore = create((set: any, get: any) => ({
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
             set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price}))
         }
-
-        //  ADD THE NEW PRODUCT AND INCREASE THE COUNTER WITH NEW QUANTITY ADDED
-        // set((state: any) => ({ basketProducts: [...state.basketProducts, existProduct] }))
-
-        
-
 
     },
     removeProductFromBasket: (id: string | number) => {

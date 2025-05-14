@@ -25,16 +25,13 @@ export const useBasketStore = create((set: any, get: any) => ({
     totalPrice: INITIAL_STATE.totalPrice,
 
     addProductToBasket: (product: IProduct, quantity: number, size: string) => {
-        // console.log(product, quantity, size);
-
-                console.log('...',product);
         let newProduct: any = product;
         let productQtySizeUpdated: any = {}
         let productQtySize = {
             quantity: quantity,
             size: size,
         };
-        
+
         // CHECK IF THE PRODUCT IS ALREADY IN THE BASKET
         const existProduct = get().basketProducts.find((item: any) => item._id === newProduct._id);
         const restOfProductsFromList = get().basketProducts.filter((item: any) => item._id !== newProduct._id);
@@ -50,32 +47,78 @@ export const useBasketStore = create((set: any, get: any) => ({
             //  ADD THE NEW PRODUCT AND INCREASE THE COUNTER WITH NEW QUANTITY ADDED
             set((state: any) => ({ basketProducts: [...state.basketProducts, newProduct] }))
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
-            set((state: any) => ({ totalPrice: state.totalPrice + newProduct.price}))
+            set((state: any) => ({ totalPrice: state.totalPrice + newProduct.price }))
             return
         }
 
-        if(existProduct.productQtySize.find((item: any) => item.size === size)) {
+        if (existProduct.productQtySize.find((item: any) => item.size === size)) {
             // console.log('...',existProduct.price);
-            
+
             existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;;
             productQtySizeUpdated['quantity'] = existProduct.productQtySize.find((item: any) => item.size === size).quantity;
             productQtySizeUpdated['size'] = existProduct.productQtySize.find((item: any) => item.size === size).size;
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
-            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price}))
-            
+            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price }))
+
         } else {
             existProduct.productQtySize.push(productQtySize);
             productQtySizeUpdated['quantity'] = productQtySize.quantity;
             productQtySizeUpdated['size'] = productQtySize.size;
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
-            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price}))
+            set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price }))
         }
 
     },
-    removeProductFromBasket: (id: string | number) => {
-        set((state: any) => ({ totalPrice: state.totalPrice - parseFloat(get().basketProducts.filter((product: IProduct) => id === product._id)[0]?.price) }))
-        set((state: any) => ({ basketProducts: state.basketProducts.filter((product: IProduct) => product._id !== id) }))
-        set((state: any) => ({ counterProduct: state.counterProduct - 1 }))
+    removeSizeProductFromBasket: (id: string | number, size: string) => {
+        const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)
+        targetProduct[0].productQtySize.map((detailProduct: any) => {
+            if (detailProduct.size === size) {
+                set((state: any) => ({ totalPrice: state.totalPrice -( targetProduct[0].price * parseFloat(detailProduct.quantity) )}))
+                // detailProduct.quantity = detailProduct.quantity < 0 ? 0 : detailProduct.quantity                
+                set((state: any) => ({ counterProduct: state.counterProduct - detailProduct.quantity }))
+                detailProduct.quantity = 0;
+                
+            }
+            if (detailProduct.quantity === 0) {
+                targetProduct[0].productQtySize = targetProduct[0].productQtySize.filter((detailProduct: any) => detailProduct.size !== size);
+            }
+        })
+
+        if (targetProduct[0].productQtySize.length === 0)
+            set((state: any) => ({ basketProducts: state.basketProducts.filter((product: any) => product._id !== id) }));
+    },
+
+    increaseQuantityBySize: (id: string | number, size: string) => {
+        const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)[0];
+
+        targetProduct.productQtySize.map((detailProduct: any) => {
+            if (detailProduct.size === size) {
+                ++detailProduct.quantity;
+                set((state: any) => ({ counterProduct: state.counterProduct + 1 }))
+                set((state: any) => ({ totalPrice: state.totalPrice + parseFloat(targetProduct?.price) }))
+            }
+        })
+
+    },
+
+    decreaseQuantityBySize: (id: string | number, size: string) => {
+        const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)[0];
+
+        targetProduct.productQtySize.map((detailProduct: any) => {
+            if (detailProduct.size === size) {
+                --detailProduct.quantity;
+                set((state: any) => ({ counterProduct: state.counterProduct - 1 }))
+                set((state: any) => ({ totalPrice: state.totalPrice - parseFloat(targetProduct?.price) }))
+            }
+
+            if (detailProduct.quantity === 0) {
+                targetProduct.productQtySize = targetProduct.productQtySize.filter((detailProduct: any) => detailProduct.size !== size);
+
+                if (targetProduct.productQtySize.length === 0) {
+                    set((state: any) => ({ basketProducts: state.basketProducts.filter((product: any) => product._id !== id) }));
+                }
+            }
+        })        
     },
 
     increaseQuantity: (id: string | number) => {

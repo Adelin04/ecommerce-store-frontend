@@ -16,27 +16,14 @@ interface PropsBasketCard {
 export default function BasketProductCard({ product }: any) {
     const router = useRouter()
     const { selectProduct } = useProductStore();
-    const { removeProductFromBasket, decreaseQuantity, increaseQuantity, counterProduct } = useBasketStore();
-    const { name, color, price, brand, size, currency, gender, category, images, seller } = product as IProduct | any
+    const { removeSizeProductFromBasket, increaseQuantityBySize, decreaseQuantityBySize, counterProduct,basketProducts } = useBasketStore();
     const [open, setOpen] = React.useState(false);
     const [quantity, setQuantity] = useState(0);
-
-    useEffect(() => {
-        product && product.productQtySize.map((item: any) => {
-                setQuantity(quantity + item.quantity)
-                console.log('item',item.quantity);
-                console.log('quantity',quantity);
-                
-            })
-
-        
-    }, []);
     
     const handleClick = () => {
         product && selectProduct(product._id)
         product && router.push(`/product-details/${product._id}`);
-    };
-
+    };    
 
     return (
         <Container className='container-basket-product-card' style={{ overflow: `${open ? 'hidden' : 'auto'}` }}>
@@ -47,48 +34,46 @@ export default function BasketProductCard({ product }: any) {
                 </div>
 
                 <div className='wrapper-info1-product-card'>
-                    <p className='name'>{name?.toUpperCase()}</p>
-                    <p className='brand'>{brand?.brand.toUpperCase()}</p>
+                    <p className='name'>{product?.name.toUpperCase()}</p>
+                    <p className='brand'>{product?.brand.brand}</p>
                 </div>
 
 
                 <div className='wrapper-info2-product-card'>
-                    <p className='color'>{color.color}</p>
-
-                    <p className='seller'>{seller?.toUpperCase()}</p>
-                    <p className='gender'>{gender.gender}</p>
-                    <p className='category'>{category.category}</p>
+                    <p className='color'>{product?.color.color}</p>
+                    <p className='gender'>{product?.gender.gender}</p>
+                    <p className='category'>{product?.category}</p>
                 </div>
 
 
                 <div className='wrapper-info3-product-card' style={{ display: 'flex', flexDirection: 'row' }}>
 
                     <div className='container-quantity' >
-                        {product.productQtySize.map((item: any, index: number) => (
+                        {product && product?.productQtySize.map((item: any, index: number) => (
                             <div key={index} className='wrapper-btns-quantity-size-icon'>
                                 <div  className='wrapper-btns-quantity-size' >
                                 
+                                    <p className='size' >{item?.size}</p>
                                     <div className='wrapper-btns'>
                                         <Button
                                             className='button-plus-quantity'
                                             style={{ marginRight: '10px' }}
-                                            onClick={() => { counterProduct >= 1 && product && decreaseQuantity(product?._id) }}>
+                                            onClick={() => { counterProduct >= 1 && product && decreaseQuantityBySize(product?._id,item?.size) }}>
                                             <i className="" ><FaMinus /></i>
                                         </Button>
-                                            <p className='size' >{item?.size}</p>
                                             <p className='quantity' >{item?.quantity}</p>
                                         <Button
                                             className='button-minus-quantity'
                                             style={{ marginLeft: '10px' }}
-                                            onClick={() => { product && increaseQuantity(product?._id) }}>
+                                            onClick={() => { product && increaseQuantityBySize(product?._id,item?.size) }}>
                                             <i className=""><FaPlus /></i>
                                         </Button>
                                     </div>
 
                                     
-                                    <p className='price'>{product.price * item?.quantity}{" "}{currency.currency}</p>
+                                    <p className='price' key={index}>{product.price * item?.quantity}{" "}{product?.currency?.currency}</p>
                                     <div className='wrapper-button-delete'>
-                                        <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeProductFromBasket(product._id)} />
+                                        <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeSizeProductFromBasket(product._id,item?.size)} />
                                     </div>
 
                                 </div>
@@ -100,17 +85,7 @@ export default function BasketProductCard({ product }: any) {
 
                 </div>
 
-{/* 
-                <div className='wrapper-price-product-card'>
-                    
-                    <p className='price'>{price * quantity}{" "}{currency.currency}</p>
-                </div> */}
-
             </WrapperBasketProductCard>
-
-            {/* <WrapperButtonsBasketProductCard className='wrapper-buttons-product-card' >
-                <Image className='button-delete' src={DeleteIcon} alt={'delete icon'} onClick={() => product && removeProductFromBasket(product._id)} />
-            </WrapperButtonsBasketProductCard> */}
 
 
         </Container>
@@ -156,7 +131,6 @@ const WrapperBasketProductCard = styled.div`
             align-items: center;
             width: 70px;
             height: 100px;
-            margin: 5px 10px;
             border-radius: 10px;
             object-fit: cover;
             cursor: pointer;
@@ -216,17 +190,13 @@ const WrapperBasketProductCard = styled.div`
         /* background-color: var(--button-color); */
     }   
     
-/*     .container-quantity p {
+    .size {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: auto;
-        height: auto;
-        margin: 5px;
-        border-radius: 5px;
-        color: #ffffff;
-        background-color: var(--button-color);
-    } */
+        padding: 5px;
+        font-size: 25px;
+    }
     
     .wrapper-btns-quantity-size {
         display: flex;

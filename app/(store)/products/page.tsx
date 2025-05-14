@@ -16,7 +16,7 @@ const ProductsPage = () => {
     useEffect(() => {
         if (!selectedProducts) return selectedByCategory(localStorage.getItem('category-selected'), localStorage.getItem('gender')?.toLowerCase());
         if (!localStorage.getItem('category-selected') || !localStorage.getItem('gender')) return redirect('/');
-    }, [products])
+    }, [products,isLoadingProducts])
 
 
     if (!hasMounted || isLoadingProducts)

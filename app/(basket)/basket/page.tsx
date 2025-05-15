@@ -46,21 +46,19 @@ export default function BasketPage() {
                     <p> Items: {counterProduct}</p>
                     <p>Total: ${totalPrice}</p>
                     <div className='wrapper-clear-basket-button'>
-                        <Button className='clear-basket-button' disabled={basketProducts.length === 0}  onClick={() => clearBasket()} >
+                        <Button className='clear-basket-button' disabled={basketProducts.length === 0} onClick={() => clearBasket()} >
                             <span>
                                 {'CLEAR BASKET'}
                             </span>
-                            <Image className='clear-basket-button-image' src={Clear_basket} alt={'delete icon'} width={40} height={40}/>
+                            <Image className='clear-basket-button-image' src={Clear_basket} alt={'delete icon'} width={40} height={40} />
                         </Button>
                     </div>
                 </div>
             </WrapperSummary>
 
-            {
-                basketProducts.length > 0 && <WrapperButton>
-                    <Button className='next-step-button' disabled={basketProducts.length === 0} onClick={() => router.push('/Address')}> NEXT STEP </Button>
-                </WrapperButton>
-            }
+            {basketProducts.length > 0 && <WrapperButton>
+                <Button className='next-step-button' disabled={basketProducts.length === 0} onClick={() => router.push('/Address')}> NEXT STEP </Button>
+            </WrapperButton>}
 
         </Container>
     );
@@ -112,9 +110,8 @@ const WrapperSummary = styled.div`
     margin-top: 25px;
     width: 100%;
     height: 100%;
-    /* background: green; */
-    
-    .summary{
+
+    .summary {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -123,6 +120,7 @@ const WrapperSummary = styled.div`
         height: 250px;
         margin: 5px;
         margin-right: 68px;
+        margin-left: 68px;
         padding: 5px;
         border-radius: 10px;
         border: 1px solid var(--border-color);
@@ -150,13 +148,21 @@ const WrapperSummary = styled.div`
             display: flex;
             justify-content: center;
             align-items: center;
-
             font-size: 13px;
             font-weight: bold;
             color: white;
         }
     }
 
+    @media (max-width: 850px) {
+        .wrapper-summary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0px auto;
+        }
+
+    }
 `
 
 const WrapperButton = styled.div`

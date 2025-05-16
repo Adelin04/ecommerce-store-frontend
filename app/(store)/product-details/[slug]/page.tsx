@@ -14,7 +14,7 @@ import styled from 'styled-components'
 
 const ProductSlug = ({ params }: any) => {
     const { hasMounted } = useMounted()
-    const { selectedProduct }: any = useProductStore()
+    const { selectedProduct, setProductById, isLoadingProducts }: any = useProductStore()
     const [afterRefreshPageProduct, setAfterRefreshPageProduct] = React.useState<IProduct | null>(null)
 
     async function fetchedProductById() {
@@ -24,9 +24,10 @@ const ProductSlug = ({ params }: any) => {
 
     useEffect(() => {
         if (!selectedProduct) fetchedProductById().then((data) => setAfterRefreshPageProduct(data));
+        setProductById(params.slug.toString().trim());
     }, [selectedProduct])
 
-    if (!hasMounted)
+    if (!hasMounted || isLoadingProducts)
         return <Loading />
 
     return (

@@ -106,7 +106,7 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
                 <div className='wrapper-quantity-size' >
                     <div className='wrapper-select-size'>
                         <select className='select-size' value={productSize} onChange={(e) => setProductSize(e.target.value)}>
-                            < option value={"None"} > None </option>
+                            < option value={"Size"} > Size </option>
                             {
                                 sizesProductAvailable?.map((size: any, index: number) => {
                                     return (

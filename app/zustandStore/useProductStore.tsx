@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { IProduct } from "../interfaces/interfaces";
 import axios from "axios";
 import { URI } from "../utils/URI";
-import { fetchProducts } from "../actions/productActions";
+import { fetchProductById, fetchProducts } from "../actions/productActions";
 
 interface ProductState {
     products: Array<IProduct>,
@@ -54,15 +54,20 @@ export const useProductStore = create((set: any, get: any) => ({
         set(() => ({ isLoadingProducts: false }));
     },
 
-    setProductById: async (product: IProduct) => {
+    setProductById: async (id: string | number) => {
 
-        // const fetchProduct = await axios.get(`${process.env.DEV_URI}products/setProductById/${_id}`);
+        set(() => ({ isLoadingProducts: true }))
 
-        set(() => ({ productById: product }))
+        const fethedProducById = await fetchProductById(id).then((data) => { return data });
+
+        set(() => ({ productById: fethedProducById }));
+        set(() => ({ isLoadingProducts: false }))
     },
 
     selectProduct: (id: string) => {
+        set(() => ({ isLoadingProducts: true }))
         set(() => ({ selectedProduct: get().products.filter((product: IProduct) => product._id === id)[0] }))
+        set(() => ({ isLoadingProducts: false }))
     },
 
     selectedByCategory: (category: any, genderSelected: string) => {

@@ -10,36 +10,46 @@ import { useBasketStore } from '@/app/zustandStore/useBasketStore'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import exclamation from '../../../assets/exclamation.png'
 
-export default function cardProductDetails({ product }: { product: IProduct | any }) {
+export default function CardProductDetails({ product }: { product: IProduct | any }) {
     const { addProductToBasket } = useBasketStore();
     const [selectedImage, setSelectedImage] = useState(0)
     const [productSize, setProductSize] = useState('');
+    const [toggle, setToggle] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [sizesProductAvailable, setSizesProductAvailable] = useState(['S', 'M', 'L', 'XL']);
 
     //  Add new product to basket
     const handleAddToCart = () => {
 
-        // GET THE LOCALSTORAGE BASKET
-        let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
+        if (!productSize) {
+            setToggle(true)
+            setInterval(() => setToggle(false), 3000)
 
-        //  FILTERED LOCALSTORAGE
-        let filterLocalStorage: any = localStorage_BASKET && localStorage_BASKET.filter(
-            (item: any) => item.productId === product.id && item.size === productSize
-        );
-
-        //  CHECK IF THE 'EXISTPRODUCT' IS AN ARRAY AND IF IT IS GREATER THEN 0...
-        //  IF CONDITION IS TRUE THIS MEANS IT IS THE FIRST PRODUCT ADDED
-        if (filterLocalStorage && filterLocalStorage.length > 0) {
-            filterLocalStorage[0].quantity += quantity;
-        } else {
-            // localStorage_BASKET = []
-            localStorage_BASKET.push({
-                productId: product._id,
-                quantity: quantity,
-                size: productSize,
-            });
+            return
         }
+
+        if (productSize) { setToggle(false) }
+
+        // // GET THE LOCALSTORAGE BASKET
+        // let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
+
+        // //  FILTERED LOCALSTORAGE
+        // let filterLocalStorage: any = localStorage_BASKET && localStorage_BASKET.filter(
+        //     (item: any) => item.productId === product.id && item.size === productSize
+        // );
+
+        // //  CHECK IF THE 'EXISTPRODUCT' IS AN ARRAY AND IF IT IS GREATER THEN 0...
+        // //  IF CONDITION IS TRUE THIS MEANS IT IS THE FIRST PRODUCT ADDED
+        // if (filterLocalStorage && filterLocalStorage.length > 0) {
+        //     filterLocalStorage[0].quantity += quantity;
+        // } else {
+        //     // localStorage_BASKET = []
+        //     localStorage_BASKET.push({
+        //         productId: product._id,
+        //         quantity: quantity,
+        //         size: productSize,
+        //     });
+        // }
 
         //  ZUSTAND basketStore - ADD THE NEW PRODUCT IN SHOPPING CART LIST 
         addProductToBasket(
@@ -51,7 +61,7 @@ export default function cardProductDetails({ product }: { product: IProduct | an
 
 
         //  SET THE LOCALSTORAGE AFTER UPDATE THE BASKET
-        localStorage.setItem("BASKET", JSON.stringify(localStorage_BASKET));
+        // localStorage.setItem("BASKET", JSON.stringify(localStorage_BASKET));
 
     };
 
@@ -89,32 +99,13 @@ export default function cardProductDetails({ product }: { product: IProduct | an
 
                         {product && <Image className='img-product-card-selected' src={product?.images[selectedImage].image} alt={product?.name} width={200} height={300} priority loading='eager' />}
 
+
                         <ContainerAddToCart className='container-add-to-cart'>
 
                             <div className='wrapper-quantity-size' >
-                                <div className='wrapper-quantity'>
-                                    <Button
-                                        className='button-plus-quantity'
-                                        style={{ marginRight: '10px' }}
-                                        onClick={() => { quantity < 2 ? setQuantity(1) : setQuantity(quantity - 1); }}>
-                                        <i className="" ><FaMinus /></i>
-                                    </Button>
-
-                                    <div className='quantity' >
-                                        {quantity}
-                                    </div>
-
-                                    <Button
-                                        className='button-minus-quantity'
-                                        style={{ marginLeft: '10px' }}
-                                        onClick={() => { setQuantity(quantity + 1); }}>
-                                        <i className=""><FaPlus /></i>
-                                    </Button>
-                                </div>
-
                                 <div className='wrapper-select-size'>
                                     <select className='select-size' value={productSize} onChange={(e) => setProductSize(e.target.value)}>
-                                        < option value={"None"} > None </option>
+                                        < option value={"Size"} > Size </option>
                                         {
                                             sizesProductAvailable?.map((size: any, index: number) => {
                                                 return (
@@ -123,14 +114,14 @@ export default function cardProductDetails({ product }: { product: IProduct | an
                                             })
                                         }
                                     </select>
-                                    {(productSize === 'None' || productSize === '') && <Image className='img-exclamation' src={exclamation} alt="exclamation" width={50} height={50} />}
+                                    {toggle && <Image className='img-exclamation' src={exclamation} alt="exclamation" width={50} height={50} />}
                                 </div>
 
                             </div>
 
 
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                                <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' disabled={(productSize === 'None' || productSize === '') ? true : false} onClick={handleAddToCart}> Add to cart </Button>
+                                <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' onClick={() => { handleAddToCart() }}> Add to cart </Button>
                             </div>
 
                         </ContainerAddToCart>
@@ -138,14 +129,6 @@ export default function cardProductDetails({ product }: { product: IProduct | an
                 </ContainerSelectedImages>
 
             </ContainerImagesProductCard>
-
-
-
-
-
-
-
-
 
         </Container>
     )

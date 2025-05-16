@@ -33,18 +33,21 @@ export default function BasketProductCard({ product }: any) {
                     <img className='img-product-card' src={product?.images[0].image} alt={product?.name} onClick={handleClick} />
                 </div>
 
-                <div className='wrapper-info1-product-card'>
-                    <p className='name'>{product?.name.toUpperCase()}</p>
-                    <p className='brand'>{product?.brand.brand}</p>
-                </div>
+
+                <ContainerInfoProductCard_1_2 className='container-info-product-card-1-2'>
+                    <div className='wrapper-info1-product-card'>
+                        <p className='name'>{product?.name.toUpperCase()}</p>
+                        <p className='brand'>{product?.brand.brand}</p>
+                    </div>
 
 
-                <div className='wrapper-info2-product-card'>
-                    <p className='color'>{product?.color.color}</p>
-                    <p className='gender'>{product?.gender.gender}</p>
-                    <p className='category'>{product?.category}</p>
-                </div>
+                    <div className='wrapper-info2-product-card'>
+                        <p className='color'>{product?.color.color}</p>
+                        <p className='gender'>{product?.gender.gender}</p>
+                        <p className='category'>{product?.category}</p>
+                    </div>
 
+                </ContainerInfoProductCard_1_2>
 
                 <div className='wrapper-info3-product-card' style={{ display: 'flex', flexDirection: 'row' }}>
 
@@ -104,10 +107,29 @@ const Container = styled.div`
         border: 1px solid salmon;
         border-radius: 10px;
         overflow: hidden;
-    `
+
+        @media (min-width: 760px) {
+            .wrapper-basket-product-card {
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 450px) {
+            .container-info-product-card-1-2{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+`
 
 const WrapperBasketProductCard = styled.div`
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         width: 90%;
@@ -115,6 +137,7 @@ const WrapperBasketProductCard = styled.div`
         margin: 5px 0px;
         padding: 10px;
         border-radius: 10px;
+
 
         .wrapper-img-product-card{
             display: flex;
@@ -135,6 +158,7 @@ const WrapperBasketProductCard = styled.div`
             object-fit: cover;
             cursor: pointer;
         }
+
 
         .wrapper-info1-product-card,
         .wrapper-info3-product-card,
@@ -264,6 +288,23 @@ const WrapperBasketProductCard = styled.div`
         font-size: 18px;
         font-weight: bold;
     }
+`
+
+const ContainerInfoProductCard_1_2 = styled.div`
+
+    @media (max-width: 850px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        margin: 5px;
+        border-radius: 10px;
+    }
+        
+
+`
 
 // const WrapperButtonsBasketProductCard = styled.div`
 //         display: flex;

@@ -108,7 +108,7 @@ const WrapperSummary = styled.div`
     justify-content: center;
     align-items: end;
     margin-top: 25px;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
 
     .summary {
@@ -160,6 +160,7 @@ const WrapperSummary = styled.div`
             justify-content: center;
             align-items: center;
             margin: 0px auto;
+            margin-left: 68px;
         }
 
     }

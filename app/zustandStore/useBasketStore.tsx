@@ -3,6 +3,7 @@ import { IProduct } from "../interfaces/interfaces";
 
 interface BasketState {
     basketProducts: IProduct[],
+    // localStorage: [],
     counterProduct: number,
     totalPrice: number,
     addProductToBasket: (product: IProduct) => void,
@@ -12,6 +13,7 @@ interface BasketState {
 
 const INITIAL_STATE = {
     basketProducts: [],
+    // localStorage: [],
     counterProduct: 0,
     totalPrice: 0,
     addProductToBasket: (product: IProduct) => { },
@@ -21,10 +23,12 @@ const INITIAL_STATE = {
 
 export const useBasketStore = create((set: any, get: any) => ({
     basketProducts: INITIAL_STATE.basketProducts,
+    // localStorage: INITIAL_STATE.localStorage,
     counterProduct: INITIAL_STATE.counterProduct,
     totalPrice: INITIAL_STATE.totalPrice,
 
     addProductToBasket: (product: IProduct, quantity: number, size: string) => {
+
         let newProduct: any = product;
         let productQtySizeUpdated: any = {}
         let productQtySize = {
@@ -34,7 +38,6 @@ export const useBasketStore = create((set: any, get: any) => ({
 
         // CHECK IF THE PRODUCT IS ALREADY IN THE BASKET
         const existProduct = get().basketProducts.find((item: any) => item._id === newProduct._id);
-        const restOfProductsFromList = get().basketProducts.filter((item: any) => item._id !== newProduct._id);
 
         if (!existProduct) {
             //  SAVE THE NEW PRODUCT ADDED
@@ -48,18 +51,21 @@ export const useBasketStore = create((set: any, get: any) => ({
             set((state: any) => ({ basketProducts: [...state.basketProducts, newProduct] }))
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
             set((state: any) => ({ totalPrice: state.totalPrice + newProduct.price }))
+
+            // ADD THE NEW PRODUCT TO THE LOCALSTORAGE
+            const tmp_localStorage = JSON.parse(localStorage.getItem("BASKET") || "[]");
+            tmp_localStorage.push({ productId: newProduct._id, productQtySize: [productQtySize] });
+            localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
+            console.log(get().basketProducts);
             return
         }
 
         if (existProduct.productQtySize.find((item: any) => item.size === size)) {
-            // console.log('...',existProduct.price);
-
-            existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;;
+            existProduct.productQtySize.find((item: any) => item.size === size).quantity += quantity;
             productQtySizeUpdated['quantity'] = existProduct.productQtySize.find((item: any) => item.size === size).quantity;
             productQtySizeUpdated['size'] = existProduct.productQtySize.find((item: any) => item.size === size).size;
             set((state: any) => ({ counterProduct: state.counterProduct + quantity }))
             set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price }))
-
         } else {
             existProduct.productQtySize.push(productQtySize);
             productQtySizeUpdated['quantity'] = productQtySize.quantity;
@@ -68,16 +74,24 @@ export const useBasketStore = create((set: any, get: any) => ({
             set((state: any) => ({ totalPrice: state.totalPrice + existProduct.price }))
         }
 
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
     removeSizeProductFromBasket: (id: string | number, size: string) => {
         const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)
         targetProduct[0].productQtySize.map((detailProduct: any) => {
             if (detailProduct.size === size) {
-                set((state: any) => ({ totalPrice: state.totalPrice -( targetProduct[0].price * parseFloat(detailProduct.quantity) )}))
+                set((state: any) => ({ totalPrice: state.totalPrice - (targetProduct[0].price * parseFloat(detailProduct.quantity)) }))
                 // detailProduct.quantity = detailProduct.quantity < 0 ? 0 : detailProduct.quantity                
                 set((state: any) => ({ counterProduct: state.counterProduct - detailProduct.quantity }))
                 detailProduct.quantity = 0;
-                
+
             }
             if (detailProduct.quantity === 0) {
                 targetProduct[0].productQtySize = targetProduct[0].productQtySize.filter((detailProduct: any) => detailProduct.size !== size);
@@ -86,6 +100,15 @@ export const useBasketStore = create((set: any, get: any) => ({
 
         if (targetProduct[0].productQtySize.length === 0)
             set((state: any) => ({ basketProducts: state.basketProducts.filter((product: any) => product._id !== id) }));
+
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
 
     increaseQuantityBySize: (id: string | number, size: string) => {
@@ -99,6 +122,14 @@ export const useBasketStore = create((set: any, get: any) => ({
             }
         })
 
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
 
     decreaseQuantityBySize: (id: string | number, size: string) => {
@@ -118,7 +149,16 @@ export const useBasketStore = create((set: any, get: any) => ({
                     set((state: any) => ({ basketProducts: state.basketProducts.filter((product: any) => product._id !== id) }));
                 }
             }
-        })        
+        })
+
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
 
     increaseQuantity: (id: string | number) => {
@@ -136,9 +176,14 @@ export const useBasketStore = create((set: any, get: any) => ({
         set((state: any) => ({ totalPrice: state.totalPrice + parseFloat(targetProduct?.price) }))
         set((state: any) => ({ basketProducts: [...restOfProductsFromList, targetProduct] }))
 
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
 
-        // console.log(get().basketProducts);
-        // console.log(targetProduct);
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
     decreaseQuantity: (id: string | number) => {
         const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)[0];
@@ -152,11 +197,42 @@ export const useBasketStore = create((set: any, get: any) => ({
                 detailProduct.quantity -= 1;
             }
         })
-        console.log(targetProduct.quantityPerSize[0]);
 
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
+    },
+    updateBasketByLocalStorage: (products: IProduct[]) => {
+        let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
+        localStorage_BASKET.map((item: any) => {
+            products?.map((product: any) => {
+                if (item.product === product._id) {
+                    set((state: any) => ({ basketProducts: [...state.basketProducts, { ...product, productQtySize: item.productQtySize }] }))
+                    // set((state: any) => ({ counterProduct: state.counterProduct + item.productQtySize[0].quantity }))
+                    // set((state: any) => ({ totalPrice: state.totalPrice + (product.price * item.productQtySize[0].quantity) }))
+                }
+            })
+        })
     },
 
-    clearBasket: () => { set({ basketProducts: [] }), set({ counterProduct: 0 }), set({ totalPrice: 0 }) },
+    //  CLEAR THE BASKET
+    clearBasket: () => {
+        set({ basketProducts: [] }), set({ counterProduct: 0 }), set({ totalPrice: 0 }); localStorage.removeItem("BASKET");
+
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
+    },
 }
 
 ));

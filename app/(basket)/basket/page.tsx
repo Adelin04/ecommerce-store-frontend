@@ -1,6 +1,6 @@
 'use client'
 import { useBasketStore } from '@/app/zustandStore/useBasketStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 // import BasketProduct from '@/app/component/basketProduct';
 import Button from '@/app/component/ui/Button';
@@ -10,13 +10,18 @@ import { useUserStore } from '@/app/zustandStore/useUserStore';
 import { IProduct } from '@/app/interfaces/interfaces';
 import Clear_basket from '../../../assets/clear_basket.svg';
 import Image from 'next/image';
+import { useProductStore } from '@/app/zustandStore/useProductStore';
 
 
 export default function BasketPage() {
     const { user } = useUserStore();
-    const { basketProducts, counterProduct, totalPrice, clearBasket } = useBasketStore();
+    const { basketProducts, counterProduct, totalPrice, clearBasket, updateBasketByLocalStorage } = useBasketStore();
+    const { products,isLoadingProducts } = useProductStore();
     const router = useRouter();
 
+    useEffect(() => {
+        products && updateBasketByLocalStorage(products);
+    }, [products, localStorage.getItem('BASKET'),isLoadingProducts]);
 
     return (
         <Container className='container-basket'>

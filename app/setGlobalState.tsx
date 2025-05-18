@@ -8,6 +8,7 @@ import { useCategoryStore } from './zustandStore/useCategoryStore';
 import Loading from './loading';
 import { useMounted } from './component/useMounted';
 import { useUserStore } from './zustandStore/useUserStore';
+import { useBasketStore } from './zustandStore/useBasketStore';
 // import { fetchCategories, fetchProducts } from './actions/productActions';
 // import { ICategory, IProduct, IUser } from './interfaces/interfaces';
 // import { checkIsAuth } from './actions/userActions';
@@ -15,7 +16,7 @@ import { useUserStore } from './zustandStore/useUserStore';
 const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
     const { hasMounted } = useMounted()
     const { checkAuth, checkingAuth } = useUserStore();
-    const { setProducts, products } = useProductStore();
+    const { setProducts, products, isLoadingProducts } = useProductStore();
     const { setCategories, categories, isLoadingCategories } = useCategoryStore();
 
     async function fetchData() {
@@ -39,11 +40,11 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
 
     }, [checkingAuth]);
 
-    if (!hasMounted)
+    if (!hasMounted || isLoadingCategories || isLoadingProducts)
         return <Loading />
     return (
         <Container>
-                {children}
+            {children}
         </Container>
     )
 }

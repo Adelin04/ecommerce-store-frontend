@@ -18,29 +18,22 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
     const { checkAuth, checkingAuth } = useUserStore();
     const { setProducts, products, isLoadingProducts } = useProductStore();
     const { setCategories, categories, isLoadingCategories } = useCategoryStore();
+    const { basketProducts, counterProduct, totalPrice, isLoadingBasket, clearBasket, updateBasketByLocalStorage } = useBasketStore();
 
-    async function fetchData() {
-        // const categories: Array<ICategory> = await fetchCategories().then((data) => { return data });
-        // const products: Array<IProduct> = await fetchProducts().then((data) => { return data });
-        // const userResult: any = await checkIsAuth().then((data) => { return data });
-
-
-        // categories ? setCategories(categories) : setCategories([]);
-        // products ? setProducts(products) : setProducts([]);
-
-        // userResult ? checkAuth(userResult.user) : checkAuth(null);
-        // console.log({ categories, products, userResult });
-
-    }
 
     useEffect(() => {
         checkAuth();
         setCategories();
         setProducts();
 
-    }, [checkingAuth]);
+        let localStorageBasket = JSON.parse(localStorage.getItem("BASKET") || "");
+        if (localStorageBasket) {
+            () => updateBasketByLocalStorage(localStorageBasket, products);
+        }
 
-    if (!hasMounted || isLoadingCategories || isLoadingProducts)
+    }, [checkingAuth, isLoadingBasket]);
+
+    if (!hasMounted || isLoadingCategories || isLoadingProducts || isLoadingBasket)
         return <Loading />
     return (
         <Container>

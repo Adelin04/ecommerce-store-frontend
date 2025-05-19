@@ -3,9 +3,9 @@ import { IProduct } from "../interfaces/interfaces";
 
 interface BasketState {
     basketProducts: IProduct[],
-    // localStorage: [],
     counterProduct: number,
     totalPrice: number,
+    isLoadingBasket: boolean,
     addProductToBasket: (product: IProduct) => void,
     removeProductFromBasket: (id: string | number) => void,
     clearBasket: () => void
@@ -13,9 +13,9 @@ interface BasketState {
 
 const INITIAL_STATE = {
     basketProducts: [],
-    // localStorage: [],
     counterProduct: 0,
     totalPrice: 0,
+    isLoadingBasket: false,
     addProductToBasket: (product: IProduct) => { },
     removeProductFromBasket: (id: string | number) => { },
     clearBasket: () => { }
@@ -23,7 +23,7 @@ const INITIAL_STATE = {
 
 export const useBasketStore = create((set: any, get: any) => ({
     basketProducts: INITIAL_STATE.basketProducts,
-    // localStorage: INITIAL_STATE.localStorage,
+    isLoadingBasket: INITIAL_STATE.isLoadingBasket,
     counterProduct: INITIAL_STATE.counterProduct,
     totalPrice: INITIAL_STATE.totalPrice,
 
@@ -56,7 +56,6 @@ export const useBasketStore = create((set: any, get: any) => ({
             const tmp_localStorage = JSON.parse(localStorage.getItem("BASKET") || "[]");
             tmp_localStorage.push({ productId: newProduct._id, productQtySize: [productQtySize] });
             localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
-            console.log(get().basketProducts);
             return
         }
 
@@ -207,17 +206,22 @@ export const useBasketStore = create((set: any, get: any) => ({
 
         localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
-    updateBasketByLocalStorage: (products: IProduct[]) => {
-        let localStorage_BASKET = localStorage.getItem("BASKET") && JSON.parse(localStorage.getItem("BASKET") || "") || [];
-        localStorage_BASKET.map((item: any) => {
+    updateBasketByLocalStorage: (products: IProduct[],localStorageBasket: any) => {
+        console.log(products);
+        console.log(localStorageBasket);
+        
+        set(() => ({ isLoadingBasket: true }))
+
+        localStorageBasket.map((item: any) => {
             products?.map((product: any) => {
-                if (item.product === product._id) {
+                if (item.productId === product._id) {
                     set((state: any) => ({ basketProducts: [...state.basketProducts, { ...product, productQtySize: item.productQtySize }] }))
                     // set((state: any) => ({ counterProduct: state.counterProduct + item.productQtySize[0].quantity }))
                     // set((state: any) => ({ totalPrice: state.totalPrice + (product.price * item.productQtySize[0].quantity) }))
                 }
             })
         })
+        set(() => ({ isLoadingBasket: false }))
     },
 
     //  CLEAR THE BASKET

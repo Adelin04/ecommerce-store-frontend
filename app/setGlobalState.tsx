@@ -26,12 +26,7 @@ const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
         setCategories();
         setProducts();
 
-        let localStorageBasket = JSON.parse(localStorage.getItem("BASKET") || "");
-        if (localStorageBasket) {
-            () => updateBasketByLocalStorage(localStorageBasket, products);
-        }
-
-    }, [checkingAuth, isLoadingBasket]);
+    }, [checkingAuth,]);
 
     if (!hasMounted || isLoadingCategories || isLoadingProducts || isLoadingBasket)
         return <Loading />

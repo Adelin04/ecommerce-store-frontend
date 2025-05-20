@@ -4,16 +4,6 @@ import Footer from "./component/footer";
 import SetGlobalState from "./setGlobalState";
 import React from "react";
 
-const linksNavBar: Array<{ to: string; name: string }> = [
-    {
-        to: "/men",
-        name: "MEN",
-    },
-    {
-        to: "/women",
-        name: "WOMEN",
-    },
-]
 
 export const metadata: Metadata = {
     title: "BOUTIQUE",
@@ -30,12 +20,7 @@ export default function RootLayout({
         <html lang="en">
             <body >
                 <SetGlobalState>
-                    {/* <NavBar navBarMenu={linksNavBar} /> */}
-                    {/* <div style={{ paddingTop: '125px', width: '100%' }}> */}
-
-                        {children}
-                    {/* </div> */}
-                    {/* <Footer /> */}
+                    {children}
                 </SetGlobalState>
             </body>
         </html>

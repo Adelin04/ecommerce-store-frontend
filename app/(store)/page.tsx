@@ -9,8 +9,7 @@ import { useProductStore } from '../zustandStore/useProductStore';
 import zzz from '../../assets/zzz.svg';
 import Image from 'next/image';
 import Button from '../component/ui/Button';
-import { use, useEffect, useState } from 'react';
-import { useUserStore } from '../zustandStore/useUserStore';
+import { useState } from 'react';
 
 const HomePage = () => {
   const { hasMounted } = useMounted()

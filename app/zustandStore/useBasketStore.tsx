@@ -206,12 +206,10 @@ export const useBasketStore = create((set: any, get: any) => ({
 
         localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
     },
-    updateBasketByLocalStorage: (products: IProduct[],localStorageBasket: any) => {
-        console.log(products);
-        console.log(localStorageBasket);
+    updateBasketByLocalStorage: (products: IProduct[], localStorageBasket: any) => {
 
+        set(() => ({ basketProducts: INITIAL_STATE.basketProducts }));
         set(() => ({ isLoadingBasket: true }))
-
         products.map((product: any) => {
             localStorageBasket.map((item: any) => {
                 if (item.productId === product._id) {
@@ -221,31 +219,32 @@ export const useBasketStore = create((set: any, get: any) => ({
                 }
             })
         })
-            // localStorageBasket.map((item: any) => {
-            //     products?.map((product: any) => {
-            //         if (item.productId === product._id) {
-            //             set((state: any) => ({ basketProducts: [...state.basketProducts, { ...product, productQtySize: item.productQtySize }] }))
-            //             // set((state: any) => ({ counterProduct: state.counterProduct + item.productQtySize[0].quantity }))
-            //             // set((state: any) => ({ totalPrice: state.totalPrice + (product.price * item.productQtySize[0].quantity) }))
-            //         }
-            //     })
-            // })
-            set(() => ({ isLoadingBasket: false }))
-        },
 
-            //  CLEAR THE BASKET
-            clearBasket: () => {
-                set({ basketProducts: [] }), set({ counterProduct: 0 }), set({ totalPrice: 0 }); localStorage.removeItem("BASKET");
+        // localStorageBasket.map((item: any) => {
+        //     products?.map((product: any) => {
+        //         if (item.productId === product._id) {
+        //             set((state: any) => ({ basketProducts: [...state.basketProducts, { ...product, productQtySize: item.productQtySize }] }))
+        //             // set((state: any) => ({ counterProduct: state.counterProduct + item.productQtySize[0].quantity }))
+        //             // set((state: any) => ({ totalPrice: state.totalPrice + (product.price * item.productQtySize[0].quantity) }))
+        //         }
+        //     })
+        // })
+        set(() => ({ isLoadingBasket: false }))
+    },
 
-                // UPDATE THE LOCALSTORAGE
-                localStorage.removeItem("BASKET");
-                let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
-                get().basketProducts.map((product: any) => {
-                    tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
-                })
+    //  CLEAR THE BASKET
+    clearBasket: () => {
+        set({ basketProducts: [] }), set({ counterProduct: 0 }), set({ totalPrice: 0 }); localStorage.removeItem("BASKET");
 
-                localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
-            },
+        // UPDATE THE LOCALSTORAGE
+        localStorage.removeItem("BASKET");
+        let tmp_localStorage: { productId: any; productQtySize: any; }[] = [];
+        get().basketProducts.map((product: any) => {
+            tmp_localStorage.push({ productId: product._id, productQtySize: product.productQtySize })
+        })
+
+        localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
+    },
 }
 
 ));

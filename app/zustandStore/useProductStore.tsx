@@ -61,6 +61,7 @@ export const useProductStore = create((set: any, get: any) => ({
         const fethedProducById = await fetchProductById(id).then((data) => { return data });
 
         set(() => ({ productById: fethedProducById }));
+        set(() => ({ productById: fethedProducById }));
         set(() => ({ isLoadingProducts: false }))
     },
 

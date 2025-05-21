@@ -14,18 +14,19 @@ import styled from 'styled-components'
 
 const ProductSlug = ({ params }: any) => {
     const { hasMounted } = useMounted()
-    const { selectedProduct, setProductById, isLoadingProducts }: any = useProductStore()
+    const { selectedProduct, setProductById, selectProduct, isLoadingProducts }: any = useProductStore()
     const [afterRefreshPageProduct, setAfterRefreshPageProduct] = React.useState<IProduct | null>(null)
 
     async function fetchedProductById() {
         const getProductById: IProduct = await fetchProductById(params.slug.toString().trim()).then((data) => { return data });
+
         return getProductById
     }
 
     useEffect(() => {
         if (!selectedProduct) fetchedProductById().then((data) => setAfterRefreshPageProduct(data));
-        setProductById(params.slug.toString().trim());
-    }, [selectedProduct])
+        // selectProduct(params.slug.toString().trim());
+    }, [selectedProduct]);
 
     if (!hasMounted || isLoadingProducts)
         return <Loading />

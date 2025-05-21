@@ -14,7 +14,6 @@ import { useState } from 'react';
 const HomePage = () => {
   const { hasMounted } = useMounted()
   const { categorySelected, isLoadingCategories, categories }: any = useCategoryStore();
-  const { selectedProducts }: any = useProductStore();
   const [message, setMessage]: any = useState(`
     No products available at the moment.
     Please leave your email and we will notify you when our site is ready.

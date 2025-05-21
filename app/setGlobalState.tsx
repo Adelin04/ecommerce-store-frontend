@@ -9,24 +9,39 @@ import Loading from './loading';
 import { useMounted } from './component/useMounted';
 import { useUserStore } from './zustandStore/useUserStore';
 import { useBasketStore } from './zustandStore/useBasketStore';
-// import { fetchCategories, fetchProducts } from './actions/productActions';
+import { fetchProductById } from './actions/productActions';
+import { IProduct } from './interfaces/interfaces';
 // import { ICategory, IProduct, IUser } from './interfaces/interfaces';
 // import { checkIsAuth } from './actions/userActions';
 
 const SetGlobalState = ({ children }: { children: React.ReactNode }) => {
     const { hasMounted } = useMounted()
     const { checkAuth, checkingAuth } = useUserStore();
-    const { setProducts, products, isLoadingProducts } = useProductStore();
-    const { setCategories, categories, isLoadingCategories } = useCategoryStore();
-    const { basketProducts, counterProduct, totalPrice, isLoadingBasket, clearBasket, updateBasketByLocalStorage } = useBasketStore();
+    const { setProducts, isLoadingProducts } = useProductStore();
+    const { setCategories, isLoadingCategories } = useCategoryStore();
+    const { isLoadingBasket, updateBasketByLocalStorage, addProductToBasket, clearBasket } = useBasketStore();
 
+    async function fetchedProductById(id: string | number) {
+        const getProductById: IProduct = await fetchProductById(id).then((data) => { return data });
+        return getProductById
+    }
 
     useEffect(() => {
+
         checkAuth();
         setCategories();
         setProducts();
 
-    }, [checkingAuth,]);
+        const localStorage_BASKET = JSON.parse((localStorage.getItem("BASKET") || "[]"));
+        clearBasket();
+        localStorage_BASKET && localStorage_BASKET.map(async (item: any) => {
+            const product = await fetchedProductById(item.productId).then((data) => { return data });
+            item.productQtySize.map((qtySize: any) => {
+                addProductToBasket(product, qtySize.quantity, qtySize.size);
+            })
+        });
+
+    }, [checkingAuth]);
 
     if (!hasMounted || isLoadingCategories || isLoadingProducts || isLoadingBasket)
         return <Loading />

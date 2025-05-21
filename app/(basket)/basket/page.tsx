@@ -16,13 +16,13 @@ import { useProductStore } from '@/app/zustandStore/useProductStore';
 export default function BasketPage() {
     const { user } = useUserStore();
     const { basketProducts, counterProduct, totalPrice, isLoadingBasket, clearBasket, updateBasketByLocalStorage } = useBasketStore();
-    const { products, isLoadingProducts } = useProductStore();
+    const { products } = useProductStore();
     const router = useRouter();
 
-    useEffect(() => {
-        // products && updateBasketByLocalStorage(products);
+    // useEffect(() => {
+    //     updateBasketByLocalStorage(products, JSON.parse((localStorage.getItem("BASKET") || "[]")));
+    // },[])
 
-    }, []);
 
     return (
         <Container className='container-basket'>

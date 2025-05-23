@@ -14,3 +14,18 @@ export async function fetchBasket(id: string | number) {
         })
     return basket;
 }
+
+export async function addProductToBasket_Server(productId: any, quantity: number, size: string) {
+    console.log({ productId, quantity, size });
+
+    const response = await fetch(`${URI}basket/addProductToBasket`, {
+        method: 'POST',
+        body: JSON.stringify({ productId, quantity, size })
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            return data
+        })
+
+    return { succes: true, response }
+}

@@ -64,9 +64,6 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
                         <span className='price'>{usePriceFormatted({ price: product?.price || null })}</span>
                     </div>
                 </WrapperPrice>
-
-
-
             </WrapperDetailsProductCard>
 
 

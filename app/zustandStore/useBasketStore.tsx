@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { IProduct } from "../interfaces/interfaces";
+import { addProductToBasket_Server } from "../actions/basketAction";
 
 interface BasketState {
     basketProducts: IProduct[],
@@ -27,7 +28,12 @@ export const useBasketStore = create((set: any, get: any) => ({
     counterProduct: INITIAL_STATE.counterProduct,
     totalPrice: INITIAL_STATE.totalPrice,
 
-    addProductToBasket: (product: IProduct, quantity: number, size: string) => {
+    addProductToBasket: async (product: IProduct, quantity: number, size: string) => {
+
+        // const responseServer = await addProductToBasket_Server(product._id, quantity, size);
+
+        // console.log({ responseServer });
+
 
         let newProduct: any = product;
         let productQtySizeUpdated: any = {}
@@ -219,16 +225,6 @@ export const useBasketStore = create((set: any, get: any) => ({
                 }
             })
         })
-
-        // localStorageBasket.map((item: any) => {
-        //     products?.map((product: any) => {
-        //         if (item.productId === product._id) {
-        //             set((state: any) => ({ basketProducts: [...state.basketProducts, { ...product, productQtySize: item.productQtySize }] }))
-        //             // set((state: any) => ({ counterProduct: state.counterProduct + item.productQtySize[0].quantity }))
-        //             // set((state: any) => ({ totalPrice: state.totalPrice + (product.price * item.productQtySize[0].quantity) }))
-        //         }
-        //     })
-        // })
         set(() => ({ isLoadingBasket: false }))
     },
 

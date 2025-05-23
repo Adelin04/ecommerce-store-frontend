@@ -5,10 +5,10 @@ import { IProduct } from '@/app/interfaces/interfaces';
 import { useMounted } from '../useMounted';
 import Loading from '@/app/loading';
 
-const ProductsList = ({ products }: any) => {
+const ProductsList = ({ products,isLoading }: any) => {
     const { hasMounted } = useMounted()
 
-    if (!hasMounted)
+    if (!hasMounted || isLoading)
         return <Loading />
     return (
         <Container className='container-products-list'>

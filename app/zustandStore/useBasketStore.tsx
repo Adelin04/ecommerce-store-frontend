@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IProduct } from "../interfaces/interfaces";
+import { IProduct, IUser } from "../interfaces/interfaces";
 import { addProductToBasket_Server } from "../actions/basketAction";
 
 interface BasketState {
@@ -28,10 +28,7 @@ export const useBasketStore = create((set: any, get: any) => ({
     counterProduct: INITIAL_STATE.counterProduct,
     totalPrice: INITIAL_STATE.totalPrice,
 
-    addProductToBasket: async (product: IProduct, quantity: number, size: string) => {
-
-        // const responseServer = await addProductToBasket_Server(product._id, quantity, size);
-
+    addProductToBasket: (product: IProduct, quantity: number, size: string) => {
         // console.log({ responseServer });
 
 

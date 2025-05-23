@@ -9,6 +9,8 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 import Image from 'next/image';
 import exclamation from '../../../assets/exclamation.png'
 import { useBasketStore } from '@/app/zustandStore/useBasketStore';
+import { useUserStore } from '@/app/zustandStore/useUserStore';
+import { addProductToBasket_Server } from '@/app/actions/basketAction';
 
 interface PropsProductCard {
     product: IProduct | null
@@ -16,6 +18,7 @@ interface PropsProductCard {
 
 const ProductCard = ({ product }: PropsProductCard | any) => {
     const router = useRouter()
+    const { user } = useUserStore();
     const { selectProduct } = useProductStore();
     const { addProductToBasket } = useBasketStore();
 
@@ -27,7 +30,7 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
 
 
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!productSize) {
             setToggle(true)
             setInterval(() => setToggle(false), 3000)
@@ -36,6 +39,9 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
         }
 
         if (productSize) { setToggle(false) }
+
+        const responseServer = user && await addProductToBasket_Server(user?._id, product._id, quantity, productSize);
+        console.log('responseServer', responseServer);
 
         addProductToBasket(
             product,

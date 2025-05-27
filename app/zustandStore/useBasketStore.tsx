@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { IProduct, IUser } from "../interfaces/interfaces";
 import { addProductToBasket_Server } from "../actions/basketAction";
+import { URI } from "../utils/URI";
 
 interface BasketState {
     basketProducts: IProduct[],
@@ -84,6 +85,7 @@ export const useBasketStore = create((set: any, get: any) => ({
         })
 
         localStorage.setItem("BASKET", JSON.stringify(tmp_localStorage))
+
     },
     removeSizeProductFromBasket: (id: string | number, size: string) => {
         const targetProduct = get().basketProducts.filter((product: IProduct) => id === product._id)

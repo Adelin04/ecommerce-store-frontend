@@ -40,15 +40,14 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
 
         if (productSize) { setToggle(false) }
 
-        const responseServer = user && await addProductToBasket_Server(user?._id, product._id, quantity, productSize);
+        const responseServer = await addProductToBasket_Server(1, 1, 1, "s");
         console.log('responseServer', responseServer);
 
-        addProductToBasket(
-            product,
-            quantity,
-            productSize
-        )
-
+        // addProductToBasket(
+        //     product,
+        //     quantity,
+        //     productSize
+        // )
 
         setProductSize('Size');
     };
@@ -102,7 +101,7 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
 
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
-                    <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' onClick={() => { handleAddToCart() }}> Add to cart </Button>
+                    <Button type='button' style={{ width: '70%', height: '35px' }} className='button-add-to-cart' onClick={handleAddToCart}> Add to cart </Button>
                 </div>
 
             </ContainerAddToCart>

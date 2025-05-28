@@ -40,7 +40,7 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
 
         if (productSize) { setToggle(false) }
 
-        const responseServer = await addProductToBasket_Server(1, 1, 1, "s");
+        const responseServer = user && product && await addProductToBasket_Server(user?._id, product?._id, quantity, productSize);
         console.log('responseServer', responseServer);
 
         // addProductToBasket(

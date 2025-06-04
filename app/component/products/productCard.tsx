@@ -43,11 +43,11 @@ const ProductCard = ({ product }: PropsProductCard | any) => {
         const responseServer = user && product && await addProductToBasket_Server(user?._id, product?._id, quantity, productSize);
         console.log('responseServer', responseServer);
 
-        // addProductToBasket(
-        //     product,
-        //     quantity,
-        //     productSize
-        // )
+        addProductToBasket(
+            product,
+            quantity,
+            productSize
+        )
 
         setProductSize('Size');
     };
